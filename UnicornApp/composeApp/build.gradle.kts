@@ -9,6 +9,10 @@ plugins {
     kotlin("plugin.serialization") version "1.9.21"
 }
 
+val coroutinesVersion = "1.7.3"
+val ktorVersion = "2.3.5"
+val sqlDelightVersion = "1.5.5"
+
 kotlin {
     androidTarget {
         compilations.all {
@@ -33,7 +37,6 @@ kotlin {
     
     sourceSets {
         val desktopMain by getting
-        
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
@@ -47,10 +50,27 @@ kotlin {
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
 
+            implementation(libs.kotlinx.coroutines.core)
             implementation (libs.kotlinx.serialization.json)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+        }
+
+        androidMain {
+            dependencies {
+                implementation(libs.ktor.client.android)
+            }
+        }
+
+        iosMain {
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
         }
     }
 }

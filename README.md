@@ -2,6 +2,9 @@
 
 Unicorn App Using Kotlin Multiplatform
 
+## Dependencies
+
+https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-ktor-sqldelight.html#add-dependencies-to-the-multiplatform-library
 
 # Links
 
