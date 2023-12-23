@@ -6,8 +6,11 @@ Unicorn App Using Kotlin Multiplatform
 
 https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-ktor-sqldelight.html#add-dependencies-to-the-multiplatform-library
 
-Moko MVVM  
+## Moko MVVM  
 https://github.com/icerockdev/moko-mvvm
+
+## Compose ImageLoader
+https://github.com/qdsfdhvh/compose-imageloader
 
 # Links
 
