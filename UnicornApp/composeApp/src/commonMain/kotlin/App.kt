@@ -1,9 +1,11 @@
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -20,6 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -32,11 +38,41 @@ fun App() {
     }
 }
 
+fun createGradientEffect(
+    colors: List<Color>,
+    isVertical: Boolean = true
+): Brush {
+
+    // Set the end offset for a vertical gradient (top to bottom)
+    val endOffset = if (isVertical) {
+        Offset(0f, Float.POSITIVE_INFINITY)
+    } else {
+        Offset(Float.POSITIVE_INFINITY, 0f)
+    }
+
+    return Brush.linearGradient(
+        colors = colors,
+        start = Offset(0f, 0f),
+        end = endOffset,
+        tileMode = TileMode.Clamp
+    )
+}
+
 @Composable
 fun AppContent(homeViewModel: HomeViewModel) {
    val products = homeViewModel.products.collectAsState()
 
-    BoxWithConstraints {
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = createGradientEffect(
+                    colors = ThemeUtils.GradientColors,
+                    isVertical = true
+                )
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
         val scope = this
         val maxWidth = scope.maxWidth
 
