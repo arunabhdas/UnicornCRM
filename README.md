@@ -1,7 +1,13 @@
 # UnicornKMM
 
 
+# Prerequisites
 
+* Install Kotlin Multiplatform Mobile plugin for Android Studio
+
+```
+brew install kdoctor
+```
 
 
 Unicorn App Using Kotlin Multiplatform
