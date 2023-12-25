@@ -3,6 +3,7 @@
 
 ## Screenshots
 <img src="https://github.com/arunabhdas/UnicornKMP/blob/main/screenshots/screenshot_android_1_framed.png" width="200"/>
+<img src="https://github.com/arunabhdas/UnicornKMP/blob/main/screenshots/screenshot_android_2_framed.png" width="200"/>
 
 # Prerequisites
 
