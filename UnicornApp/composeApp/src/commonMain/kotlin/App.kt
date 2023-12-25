@@ -2,6 +2,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +36,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberImagePainter
@@ -159,14 +161,22 @@ fun AppContent(homeViewModel: HomeViewModel) {
                                 overflow = TextOverflow.Ellipsis,
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                "${product.price.toString()} USD",
-                                maxLines = 2,
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .heightIn(min = 40.dp),
-                                overflow = TextOverflow.Ellipsis,
-                            )
+
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                Text(
+                                    "${product.price.toString()} USD",
+                                    textAlign = TextAlign.Start,
+                                    maxLines = 2,
+                                    modifier = Modifier
+                                        .padding(horizontal = 16.dp)
+                                        .heightIn(min = 40.dp),
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
+
                         }
 
                     }
