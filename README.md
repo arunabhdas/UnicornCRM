@@ -55,5 +55,6 @@ Fleet
 
 https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-multiplatform-getting-started.html#next-step
 
+https://youtu.be/TqQkv3bVMYc?si=K7Fm66B6HOgKI79C
 
 https://www.youtube.com/live/IGuVIRZzVTk?si=siZisBgLhRH1cnbs

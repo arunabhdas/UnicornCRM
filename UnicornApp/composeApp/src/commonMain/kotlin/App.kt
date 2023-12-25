@@ -1,6 +1,10 @@
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -30,6 +34,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -40,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.seiko.imageloader.rememberImagePainter
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -99,6 +105,8 @@ fun AppContent(homeViewModel: HomeViewModel) {
         }
 
         val scrollState = rememberLazyGridState()
+        val coroutineScope = rememberCoroutineScope()
+
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -107,7 +115,15 @@ fun AppContent(homeViewModel: HomeViewModel) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(cols),
                 state = scrollState,
-                contentPadding = PaddingValues(16.dp)
+                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier.draggable(
+                    orientation = Orientation.Vertical,
+                    state = rememberDraggableState {delta ->
+                        coroutineScope.launch {
+                            scrollState.scrollBy(-delta)
+                        }
+                    }
+                )
                 ) {
                 item(span = { GridItemSpan(cols) }) {
                     Column {
@@ -154,6 +170,7 @@ fun AppContent(homeViewModel: HomeViewModel) {
                             )
                             Text(
                                 product.title,
+                                textAlign = TextAlign.Start,
                                 maxLines = 2,
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp)
