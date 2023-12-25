@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -26,7 +27,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.seiko.imageloader.rememberImagePainter
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -100,13 +103,30 @@ fun AppContent(homeViewModel: HomeViewModel) {
                     items = products.value,
                     key = {product ->
                         product.id.toString()
-                    }) {
+                    }) {product ->
                     Card(
                         shape = RoundedCornerShape(15.dp),
                         modifier = Modifier.padding(8.dp).fillMaxWidth(),
                         elevation = 2.dp
                     ) {
-                        // Image
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            val painter = rememberImagePainter(url = product.image.toString())
+                            Image(
+                                painter = painter,
+                                contentDescription = "image",
+                                modifier = Modifier.height(130.dp)
+
+                            )
+                            Text(
+                                product.title,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 2
+                            )
+                        }
+
                     }
                 }
             }
