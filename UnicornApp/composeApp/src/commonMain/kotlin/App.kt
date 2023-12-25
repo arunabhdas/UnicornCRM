@@ -154,7 +154,16 @@ fun AppContent(homeViewModel: HomeViewModel) {
                                 product.title,
                                 maxLines = 2,
                                 modifier = Modifier
-                                    .padding(16.dp)
+                                    .padding(horizontal = 16.dp)
+                                    .heightIn(min = 40.dp),
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                "${product.price.toString()} USD",
+                                maxLines = 2,
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
                                     .heightIn(min = 40.dp),
                                 overflow = TextOverflow.Ellipsis,
                             )
