@@ -39,7 +39,6 @@ https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-ktor-sqlde
 
 ## Moko MVVM  
 https://github.com/icerockdev/moko-mvvm
-:wq
 
 ## Compose ImageLoader
 https://github.com/qdsfdhvh/compose-imageloader
