@@ -1,6 +1,8 @@
 # UnicornKMM
 * Unicorn App Using Kotlin Multiplatform
 
+## Screenshots
+<img src="https://github.com/arunabhdas/UnicornKMP/blob/main/screenshots/screenshot_android_1_framed.png" width="200"/>
 
 # Prerequisites
 
@@ -32,9 +34,7 @@ Conclusion:
   ✓ Your operation system is ready for Kotlin Multiplatform Mobile Development!
 ```
 
-## Screenshots
 
-![Screenshot 1](https://github.com/arunabhdas/UnicornKMP/blob/main/screenshots/screenshot_android_1_framed.png)
 
 ## Dependencies
 
