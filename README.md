@@ -17,6 +17,19 @@ Environment diagnose (to see all details, use -v option):
 [✓] Operation System
 [✓] Java
 [✓] Android Studio
+[✓] Xcode
+[!] CocoaPods
+  ! CocoaPods configuration is not required, but highly recommended for full-fledged development
+  ✖ System ruby is currently used
+    CocoaPods is not compatible with system ruby installation on Apple M1 computers.
+    Please install ruby via Homebrew, rvm, rbenv or other tool and make it default
+    Detailed information: https://stackoverflow.com/questions/64901180/how-to-run-cocoapods-on-apple-silicon-m1/66556339#66556339
+  ✖ CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.bash_profile
+    export LC_ALL=en_US.UTF-8
+
+Conclusion:
+  ✓ Your operation system is ready for Kotlin Multiplatform Mobile Development!
 ```
 
 
