@@ -1,5 +1,5 @@
-# UnicornKMM
-* Unicorn App Using Kotlin Multiplatform
+# UnicornCRM
+* Unicorn CRM App 
 
 ## Screenshots
 <img src="https://github.com/arunabhdas/UnicornKMP/blob/main/screenshots/screenshot_android_1_framed.png" width="200"/>
