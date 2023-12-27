@@ -62,7 +62,6 @@ import timber.log.Timber
 @Composable
 fun LandingScreen(
     // TODO-DEPRECATE navController: NavController,
-    viewModel: DefaultViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     val context = LocalContext.current
@@ -88,11 +87,15 @@ fun LandingScreen(
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 0.dp)
         ) {
-            Text("Test")
+            Text(
+                "Test",
+                color = Color.White
+            )
         }
     }
 
@@ -104,7 +107,6 @@ fun LandingScreen(
 @Preview
 fun LandingScreenPreview() {
     LandingScreen(
-        viewModel = MockDefaultViewModel(),
         navigator = MockDestinationsNavigator()
     )
 }

@@ -25,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var navHostController: NavHostController
     private val viewModel: DefaultViewModel by viewModels()
