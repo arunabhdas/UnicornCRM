@@ -34,7 +34,12 @@ Conclusion:
   ✓ Your operation system is ready for Kotlin Multiplatform Mobile Development!
 ```
 
+## Palette
 
+```
+    <color name="app_icon_gradient_start">@color/appBarColor</color>
+    <color name="app_icon_gradient_end">@color/primary</color>
+```
 
 ## Dependencies
 
