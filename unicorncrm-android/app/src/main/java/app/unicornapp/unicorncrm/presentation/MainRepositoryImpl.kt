@@ -1,6 +1,10 @@
 package app.unicornapp.unicorncrm.presentation
 
-class MainRepositoryImpl : MainRepository{
+import app.unicornapp.unicorncrm.api.UnicornApi
+
+class MainRepositoryImpl(
+    private val api: UnicornApi
+) : MainRepository{
     override fun doNetworkCall() {
         TODO("Not yet implemented")
     }
