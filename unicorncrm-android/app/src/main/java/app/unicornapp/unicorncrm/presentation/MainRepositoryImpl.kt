@@ -6,6 +6,6 @@ class MainRepositoryImpl(
     private val api: UnicornApi
 ) : MainRepository{
     override fun doNetworkCall() {
-        TODO("Not yet implemented")
+        api.callApi()
     }
 }
