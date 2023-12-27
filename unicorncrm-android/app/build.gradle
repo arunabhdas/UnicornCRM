@@ -123,6 +123,24 @@ dependencies {
     // AnimatedNavigationBr
     implementation("com.exyte:animated-navigation-bar:1.0.0")
 
+    // Koin
+    def koin_version = "3.4.2"
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+    testImplementation "io.insert-join:koin-test-junit4:$koin_version"
+
+    // Retrofit
+    def retrofit_version = "2.9.0"
+    def moshi_version = "5.0.0-alpha.3"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$moshi_version"
+
+    // Lifecycle
+    def lifecycle_viewmodel_version = "2.6.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_viewmodel_version"
+
     // Testing and Instrumentation
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
