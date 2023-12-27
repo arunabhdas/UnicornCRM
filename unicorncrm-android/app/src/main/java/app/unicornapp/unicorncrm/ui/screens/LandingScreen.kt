@@ -93,7 +93,7 @@ fun LandingScreen(
                 .padding(horizontal = 0.dp)
         ) {
             Text(
-                "Test",
+                "Unicorn CRM | AI Powered CRM",
                 color = Color.White
             )
         }
