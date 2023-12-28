@@ -28,9 +28,6 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     lateinit var navHostController: NavHostController
     private val viewModel: DefaultViewModel by viewModels()
-    private var isBluetootPermissionGranted = false
-    @Inject
-    lateinit var bluetoothAdapter: BluetoothAdapter
 
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,8 +51,6 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onStart() {
         super.onStart()
-        // TODO-INFO-BLUETOOTH-SCANNING-STARTS
-        // TODO-FIXME-BRINGBACKMAYBE scanBluetoothPermission()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(
@@ -69,60 +64,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-    }
-
-
-
-    fun scanBluetoothPermission() {
-        // TODO-FIXME-CLEANUP-bluetoothAdapter should be injected via DI @Inject
-        val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
-        val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
-
-        if (bluetoothAdapter == null) {
-            Toast.makeText(
-                this,
-                "Device doesn't support Bluetooth",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                bluetoothPermissionLauncher.launch(Manifest.permission.BLUETOOTH_CONNECT)
-            } else {
-                bluetoothPermissionLauncher.launch(Manifest.permission.BLUETOOTH_ADMIN)
-            }
-        }
-    }
-
-    private val bluetoothPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            // TODO-FIXME-CLEANUP-bluetoothAdapter should be injected via DI @Inject
-            val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
-            val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
-
-            if (bluetoothAdapter?.isEnabled == false) {
-                val enableBluetoothIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                bluetoothActivityResultLauncher.launch(enableBluetoothIntent)
-            } else {
-                bluetoothScanSuccessful()
-            }
-        } else {
-            isBluetootPermissionGranted = false
-        }
-    }
-
-    private fun bluetoothScanSuccessful() {
-        Toast.makeText(this, "Bluetooth connected", Toast.LENGTH_LONG).show()
-    }
-
-    private val bluetoothActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result: ActivityResult ->
-        if (result.resultCode == RESULT_OK) {
-            bluetoothScanSuccessful()
-        }
-
     }
 
 }
