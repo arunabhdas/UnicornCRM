@@ -1,16 +1,10 @@
 package app.unicornapp.unicorncrm
 
 import android.Manifest
-import androidx.activity.result.ActivityResult
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -22,13 +16,12 @@ import app.unicornapp.unicorncrm.ui.screens.NavGraphs
 import app.unicornapp.unicorncrm.ui.theme.UnicornTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
 class MainActivity : ComponentActivity() {
     lateinit var navHostController: NavHostController
     private val viewModel: DefaultViewModel by viewModels()
-    private val mainViewModel by viewModel<MainViewModel>()
 
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +35,8 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             UnicornTheme {
+                val viewModel = getViewModel<MainViewModel>()
+                viewModel.doNetworkCall()
                 navHostController = rememberNavController()
                 DestinationsNavHost(navGraph = NavGraphs.root)
 

@@ -12,7 +12,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 val appModule = module {
     single {
         Retrofit.Builder()
-            .baseUrl("localhost:8000/")
+            .baseUrl("http://localhost:8000/")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create(UnicornApi::class.java)

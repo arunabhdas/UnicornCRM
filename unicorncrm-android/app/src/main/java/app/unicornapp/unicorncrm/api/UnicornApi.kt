@@ -4,5 +4,7 @@ import retrofit2.http.GET
 
 interface UnicornApi {
     @GET("/unicorn/api/")
-    fun callApi()
+    fun callApi() {
+
+    }
 }
