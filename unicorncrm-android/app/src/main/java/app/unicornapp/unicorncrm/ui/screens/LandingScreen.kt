@@ -49,7 +49,10 @@ import androidx.lifecycle.LifecycleEventObserver
 import app.unicornapp.unicorncrm.presentation.MockDefaultViewModel
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
 import app.unicornapp.unicorncrm.presentation.DefaultViewModel
+import app.unicornapp.unicorncrm.ui.screens.destinations.MainScreenDrawerNavigationDestination
+import app.unicornapp.unicorncrm.ui.theme.TertiaryColor
 import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
+import app.unicornapp.unicorncrm.ui.theme.TransparentColor
 import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -92,10 +95,22 @@ fun LandingScreen(
                 .fillMaxSize()
                 .padding(horizontal = 0.dp)
         ) {
-            Text(
-                "Unicorn CRM | AI Powered CRM",
-                color = Color.White
-            )
+            Button(
+                onClick = {
+
+                    navigator.navigate(
+                        MainScreenDrawerNavigationDestination()
+                    )
+                },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .background(TransparentColor),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = TertiaryColor
+                )
+            ) {
+                Text(text = "Get Started")
+            }
         }
     }
 
