@@ -1,52 +1,48 @@
 package app.unicornapp.unicorncrm
 
 import app.unicornapp.unicorncrm.api.CoinPaprikaApiService
+import app.unicornapp.unicorncrm.api.CoinPaprikaApiServiceImpl
 import app.unicornapp.unicorncrm.api.UnicornApi
+import app.unicornapp.unicorncrm.presentation.CoinRepository
 import app.unicornapp.unicorncrm.presentation.MainRepository
-import app.unicornapp.unicorncrm.presentation.MainRepositoryImpl
+import app.unicornapp.unicorncrm.presentation.CoinViewModel
 import app.unicornapp.unicorncrm.presentation.MainViewModel
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.prefs.Preferences
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 val appModule = module {
 
     // Provide Gson
     single { Gson() }
 
-    single<Preferences> { PreferencesImpl() }
-
-    /* TODO-FIXME-CLEANUP
+    // Provide Retrofit
     single {
         Retrofit.Builder()
-            .baseUrl("http://localhost:8000/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .baseUrl("https://api.coinpaprika.com/")
+            .addConverterFactory(GsonConverterFactory.create(get()))
             .build()
-            .create(UnicornApi::class.java)
     }
-    */
+
+    // Provide UnicornApi
+    single {
+        get<Retrofit>().create(UnicornApi::class.java)
+    }
 
     // Provide the API service using our custom implementation
-    single<CoinPaprikaApiService> { CoinPaprikaApiServiceImpl(preferences = get()) }
-
-
-    // Provide the CoinPaprikaApiService
-    single { get<Retrofit>().create(CoinPaprikaApiService::class.java) }
+    single<CoinPaprikaApiService> { CoinPaprikaApiServiceImpl(get()) }
 
     // Provide the Repository
     single { CoinRepository(get()) }
 
     // Provide the ViewModel
-    viewModel { CoinViewModel(get()) }
-
-    single<MainRepository> {
-        MainRepositoryImpl(get())
-    }
-
     viewModel {
-        MainViewModel(get())
+        MainViewModel()
     }
+
+    viewModel { CoinViewModel(get()) }
 
 }
