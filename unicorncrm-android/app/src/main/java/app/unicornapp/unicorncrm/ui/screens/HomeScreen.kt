@@ -56,7 +56,7 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "Home",
+                "Dashboard",
                 color = Color.White
                 )
         }
