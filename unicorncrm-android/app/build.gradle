@@ -125,7 +125,7 @@ dependencies {
     implementation("com.exyte:animated-navigation-bar:1.0.0")
 
     // Koin
-    def koin_version = "3.4.2"
+    def koin_version = "4.0.1"
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
