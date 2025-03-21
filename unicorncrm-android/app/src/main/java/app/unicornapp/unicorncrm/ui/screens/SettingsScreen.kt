@@ -22,20 +22,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import app.unicornapp.unicorncrm.data.model.SettingsOption
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
 import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
 import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.ramcosta.composedestinations.annotation.Destination
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import app.unicornapp.unicorncrm.data.model.settingsOptionsList
 
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import timber.log.Timber
+
 
 @Destination
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    navigator: DestinationsNavigator
-
+    navigator: DestinationsNavigator,
+    options: List<SettingsOption>
 ) {
     Box(
         modifier = Modifier
@@ -49,20 +56,26 @@ fun SettingsScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 64.dp), // Adjust top padding as needed
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
-            Text(
-                "Settings",
-                color = Color.White
-            )
+            options.forEach { settingsOption ->
+                SettingsOptionRow(settingsOption)
+            }
         }
     }
 }
 
+
+@Composable
+fun SettingItem(option: SettingsOption) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)) {
+        Text(text = option.title, style = MaterialTheme.typography.headlineSmall)
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(text = option.description, style = MaterialTheme.typography.bodyMedium)
+    }
+}
 
 
 @Preview
@@ -70,6 +83,7 @@ fun SettingsScreen(
 fun SettingsScreenPreview() {
    SettingsScreen(
        navController = rememberNavController(),
-       navigator = MockDestinationsNavigator()
+       navigator = MockDestinationsNavigator(),
+       options = settingsOptionsList
    )
 }

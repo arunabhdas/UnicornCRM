@@ -135,10 +135,10 @@ fun DrawerBodyPreview() {
                 icon = Icons.Default.Home
             ),
             MenuItem(
-                id = "contact",
-                title = "Contact",
-                route = "contact_screen",
-                contentDescription = "Navigate to Contact",
+                id = "settings",
+                title = "Settings",
+                route = "settings_screen",
+                contentDescription = "Navigate to Settings",
                 icon = Icons.Default.Settings
             ),
             MenuItem(
