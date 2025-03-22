@@ -3,8 +3,8 @@
 
 ## Screenshots
 
-<img src="https://github.com/arunabhdas/UnicornCRM/blob/main/screenshots/UnicornCRM_permissions.gif" width="200"/>
-<img src="https://github.com/arunabhdas/UnicornCRM/blob/main/screenshots/screenshot_1_framed.png" width="200"/>
+<img src="https://github.com/arunabhdas/UnicornCRM/blob/main/screenshots/UnicornCRM_permissions.gif" width="300"/>
+<img src="https://github.com/arunabhdas/UnicornCRM/blob/main/screenshots/screenshot_1_framed.png" width="300"/>
 
 # Prerequisites
 
