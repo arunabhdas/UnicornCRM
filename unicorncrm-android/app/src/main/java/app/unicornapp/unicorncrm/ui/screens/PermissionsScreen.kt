@@ -36,6 +36,7 @@ import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
 import app.unicornapp.unicorncrm.ui.theme.TransparentColor
 import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
@@ -57,6 +58,7 @@ fun PermissionsScreen(
     var bleScanner: BluetoothLeScanner? = null
 
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+
     val multiplePermissionsState = rememberMultiplePermissionsState(
         listOf(
             Manifest.permission.RECORD_AUDIO,
@@ -155,32 +157,25 @@ fun PermissionsScreen(
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
-            if (cameraPermissionState.status.isGranted) {
+            if (multiplePermissionsState.allPermissionsGranted) {
+                // If all permissions are granted, then show screen with the feature enabled
                 Text(
-                    text = "Camera permission Granted",
+                    text = "Camera and Read storage permissions Granted! Thank you!",
                     color = Color.White
                 )
             } else {
                 Column {
-                    val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
-                        "The record audio and camera permission are needed for this app to work. Please grant permissions."
-                    } else {
-                        "Multiple permissions not available - record audio and camera"
-                    }
-
-                    Text(
-                        text = textToShow,
+                    Text(text =
+                        getTextToShowGivenPermissions(
+                            multiplePermissionsState.revokedPermissions,
+                            multiplePermissionsState.shouldShowRationale
+                        ),
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        onClick = { cameraPermissionState.launchPermissionRequest() },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = TertiaryColor
-                        )
-                    ) {
+                    Button(onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
                         Text(
-                            text = "Request multiple permissions",
+                            text = "Request record audio and camera permissions",
                             color = Color.White
                         )
                     }
@@ -191,6 +186,43 @@ fun PermissionsScreen(
 
 }
 
+
+@OptIn(ExperimentalPermissionsApi::class)
+private fun getTextToShowGivenPermissions(
+    permissions: List<PermissionState>,
+    shouldShowRationale: Boolean
+): String {
+    val revokedPermissionsSize = permissions.size
+    if (revokedPermissionsSize == 0) return ""
+
+    val textToShow = StringBuilder().apply {
+        append("The ")
+    }
+
+    for (i in permissions.indices) {
+        textToShow.append(permissions[i].permission)
+        when {
+            revokedPermissionsSize > 1 && i == revokedPermissionsSize - 2 -> {
+                textToShow.append(", and ")
+            }
+            i == revokedPermissionsSize - 1 -> {
+                textToShow.append(" ")
+            }
+            else -> {
+                textToShow.append(", ")
+            }
+        }
+    }
+    textToShow.append(if (revokedPermissionsSize == 1) "permission is" else "permissions are")
+    textToShow.append(
+        if (shouldShowRationale) {
+            " important. Please grant all of them for the app to function properly."
+        } else {
+            " denied. The app cannot function without them."
+        }
+    )
+    return textToShow.toString()
+}
 
 
 @Composable
