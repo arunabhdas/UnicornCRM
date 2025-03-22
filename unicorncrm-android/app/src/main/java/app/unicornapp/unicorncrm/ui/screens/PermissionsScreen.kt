@@ -108,6 +108,7 @@ fun PermissionsScreen(
             ) {
                 Text(text = "Get Started")
             }
+            Spacer(modifier = Modifier.height(8.dp))
             if (cameraPermissionState.status.isGranted) {
                 Text(
                     text = "Camera permission Granted",
@@ -121,7 +122,10 @@ fun PermissionsScreen(
                         "Camera not available"
                     }
 
-                    Text(textToShow)
+                    Text(
+                        text = textToShow,
+                        color = Color.White
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
                         Text(
