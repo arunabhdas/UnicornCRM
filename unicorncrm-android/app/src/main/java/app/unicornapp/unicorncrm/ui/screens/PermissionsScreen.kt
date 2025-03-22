@@ -116,7 +116,7 @@ fun PermissionsScreen(
             } else {
                 Column {
                     val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
-                        "The camera is important for this app. Please grant the permission."
+                        "The camera is needed for this app to work. We respsect your privacy and only use the camera to capture visual input. No data will be stored on our end. Please grant camera permission."
                     } else {
                         "Camera not available"
                     }
