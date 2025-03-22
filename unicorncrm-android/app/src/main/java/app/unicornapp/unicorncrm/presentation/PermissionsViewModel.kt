@@ -9,15 +9,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlin.random.Random
 
 class PermissionsViewModel: ViewModel() {
-    private val _color = MutableStateFlow(0xFFFFFFFF)
-    val color = _color.asStateFlow()
+    private val _stateFlowColor = MutableStateFlow(0xFFFFFFFF)
+    val stateFlowColor = _stateFlowColor.asStateFlow()
 
     var composeColor by mutableStateOf(0xFFFFFFFF)
     private set
 
     fun generateNewColor() {
         val randomColor = Random.nextLong(0xFFFFFFFF)
-        _color.value = randomColor
+        _stateFlowColor.value = randomColor
         composeColor = randomColor
 
     }

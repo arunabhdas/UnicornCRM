@@ -25,7 +25,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
+import app.unicornapp.unicorncrm.presentation.PermissionsViewModel
 import app.unicornapp.unicorncrm.ui.screens.destinations.MainScreenDrawerNavigationDestination
 import app.unicornapp.unicorncrm.ui.theme.TertiaryColor
 import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
@@ -52,6 +55,9 @@ fun PermissionsScreen(
     var bleScanner: BluetoothLeScanner? = null
 
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+    val viewModel = viewModel<PermissionsViewModel>()
+    val composeColor = viewModel.composeColor
+    val stateFlowColor = viewModel.stateFlowColor.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = "LandingScreenAppeared") {
         Timber.d( "route: LandingScreen")
@@ -127,7 +133,9 @@ fun PermissionsScreen(
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                    Button(
+                        onClick = { cameraPermissionState.launchPermissionRequest() }
+                    ) {
                         Text(
                             text = "Request permission",
                             color = Color.White
