@@ -5,7 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -18,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +32,9 @@ import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
 import app.unicornapp.unicorncrm.ui.theme.TransparentColor
 import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -45,12 +51,15 @@ fun PermissionsScreen(
     val lifeCycleOwner = LocalLifecycleOwner.current
     var bleScanner: BluetoothLeScanner? = null
 
+    val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+
     LaunchedEffect(key1 = "LandingScreenAppeared") {
         Timber.d( "route: LandingScreen")
     }
     var showExpandedText by remember {
         mutableStateOf(false)
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +80,9 @@ fun PermissionsScreen(
                 .padding(vertical = 8.dp)
         ) {
             Button(
-                onClick = {},
+                onClick = {
+
+                },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .background(TransparentColor),
@@ -96,6 +107,29 @@ fun PermissionsScreen(
                 )
             ) {
                 Text(text = "Get Started")
+            }
+            if (cameraPermissionState.status.isGranted) {
+                Text(
+                    text = "Camera permission Granted",
+                    color = Color.White
+                )
+            } else {
+                Column {
+                    val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
+                        "The camera is important for this app. Please grant the permission."
+                    } else {
+                        "Camera not available"
+                    }
+
+                    Text(textToShow)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                        Text(
+                            text = "Request permission",
+                            color = Color.White
+                        )
+                    }
+                }
             }
         }
     }
