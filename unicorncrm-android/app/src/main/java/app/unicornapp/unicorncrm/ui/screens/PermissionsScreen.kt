@@ -36,7 +36,6 @@ import timber.log.Timber
 
 @Destination
 @OptIn(ExperimentalPermissionsApi::class)
-@RootNavGraph(start = true)
 @Composable
 fun PermissionsScreen(
     // TODO-DEPRECATE navController: NavController,
@@ -69,7 +68,19 @@ fun PermissionsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 0.dp)
+                .padding(vertical = 8.dp)
         ) {
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .background(TransparentColor),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = TertiaryColor
+                )
+            ) {
+                Text(text = "Check Permissions")
+            }
             Button(
                 onClick = {
 

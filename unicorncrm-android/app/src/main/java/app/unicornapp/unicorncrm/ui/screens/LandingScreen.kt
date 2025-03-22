@@ -50,6 +50,7 @@ import app.unicornapp.unicorncrm.presentation.MockDefaultViewModel
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
 import app.unicornapp.unicorncrm.presentation.DefaultViewModel
 import app.unicornapp.unicorncrm.ui.screens.destinations.MainScreenDrawerNavigationDestination
+import app.unicornapp.unicorncrm.ui.screens.destinations.PermissionsScreenDestination
 import app.unicornapp.unicorncrm.ui.theme.TertiaryColor
 import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
 import app.unicornapp.unicorncrm.ui.theme.TransparentColor
@@ -97,7 +98,9 @@ fun LandingScreen(
         ) {
             Button(
                 onClick = {
-
+                    navigator.navigate(
+                        PermissionsScreenDestination()
+                    )
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -106,7 +109,7 @@ fun LandingScreen(
                     backgroundColor = TertiaryColor
                 )
             ) {
-                Text(text = "Get Started")
+                Text(text = "Go to Permissions")
             }
         }
     }
