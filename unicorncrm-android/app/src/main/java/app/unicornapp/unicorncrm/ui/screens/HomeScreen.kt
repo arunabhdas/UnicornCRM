@@ -12,12 +12,15 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -31,8 +34,6 @@ import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 
 @Destination
 @Composable
@@ -42,6 +43,8 @@ fun HomeScreen(
     viewModel: CoinViewModel = koinViewModel<CoinViewModel>()
 ) {
     val coins by viewModel.coinList.collectAsStateWithLifecycle(initialValue = emptyList())
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = true)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -53,15 +56,22 @@ fun HomeScreen(
             ),
         contentAlignment = Alignment.Center
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding() 
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 56.dp) 
-        ) {
-            items(coins) { coin ->
-                CoinCard(coin)
-                Spacer(modifier = Modifier.height(8.dp))
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center),
+                color = Color.White
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding() 
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 56.dp) 
+            ) {
+                items(coins) { coin ->
+                    CoinCard(coin)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }

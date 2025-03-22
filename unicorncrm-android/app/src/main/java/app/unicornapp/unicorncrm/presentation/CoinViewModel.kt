@@ -13,6 +13,9 @@ class CoinViewModel(private val repository: CoinRepository) : ViewModel() {
     private val _coinList = MutableStateFlow<List<CoinPaprikaCoin>>(emptyList())
     val coinList: StateFlow<List<CoinPaprikaCoin>> = _coinList
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     init {
         fetchCoins()
     }
@@ -20,10 +23,13 @@ class CoinViewModel(private val repository: CoinRepository) : ViewModel() {
     private fun fetchCoins() {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
                 val coins = repository.getCoins()
                 _coinList.value = coins
             } catch (e: Exception) {
                 e.printStackTrace()
+            } finally {
+                _isLoading.value = false
             }
         }
     }
