@@ -1,5 +1,6 @@
 package app.unicornapp.unicorncrm.ui.screens
 
+import android.Manifest
 import android.bluetooth.le.BluetoothLeScanner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,7 @@ import app.unicornapp.unicorncrm.ui.theme.TransparentColor
 import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.ramcosta.composedestinations.annotation.Destination
@@ -55,6 +57,12 @@ fun PermissionsScreen(
     var bleScanner: BluetoothLeScanner? = null
 
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+    val multiplePermissionsState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.CAMERA,
+        )
+    )
     val viewModel = viewModel<PermissionsViewModel>()
     val composeColor = viewModel.composeColor
     val stateFlowColor = viewModel.stateFlowColor.collectAsStateWithLifecycle()
@@ -136,11 +144,43 @@ fun PermissionsScreen(
                     Button(
                         onClick = { cameraPermissionState.launchPermissionRequest() },
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(composeColor)
+                            backgroundColor = TertiaryColor
                         )
                     ) {
                         Text(
                             text = "Request permission",
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            if (cameraPermissionState.status.isGranted) {
+                Text(
+                    text = "Camera permission Granted",
+                    color = Color.White
+                )
+            } else {
+                Column {
+                    val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
+                        "The record audio and camera permission are needed for this app to work. Please grant permissions."
+                    } else {
+                        "Multiple permissions not available - record audio and camera"
+                    }
+
+                    Text(
+                        text = textToShow,
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = { cameraPermissionState.launchPermissionRequest() },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = TertiaryColor
+                        )
+                    ) {
+                        Text(
+                            text = "Request multiple permissions",
                             color = Color.White
                         )
                     }
