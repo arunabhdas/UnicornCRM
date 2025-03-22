@@ -190,7 +190,10 @@ fun PermissionsScreen(
                 }
             }
             if (locationPermissionsState.allPermissionsGranted) {
-                Text("Thanks! I can access your exact location :D")
+                Text(
+                    text = "Thanks! I can access your exact location :D",
+                    color = Color.White
+                )
             } else {
                 Column {
                     val allPermissionsRevoked =
