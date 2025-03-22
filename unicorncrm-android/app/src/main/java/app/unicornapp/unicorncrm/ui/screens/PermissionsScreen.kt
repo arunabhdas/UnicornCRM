@@ -134,7 +134,10 @@ fun PermissionsScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
-                        onClick = { cameraPermissionState.launchPermissionRequest() }
+                        onClick = { cameraPermissionState.launchPermissionRequest() },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(composeColor)
+                        )
                     ) {
                         Text(
                             text = "Request permission",
