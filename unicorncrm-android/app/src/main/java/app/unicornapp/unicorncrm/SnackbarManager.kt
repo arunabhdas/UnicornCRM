@@ -11,7 +11,7 @@ data class SnackbarEvent(
 
 data class SnackbarAction(
     val name: String,
-    val action: () -> Unit
+    val action: suspend () -> Unit
 )
 
 
