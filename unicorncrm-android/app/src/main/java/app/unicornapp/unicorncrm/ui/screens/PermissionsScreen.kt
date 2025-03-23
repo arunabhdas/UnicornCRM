@@ -186,7 +186,11 @@ fun PermissionsScreen(
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { multiplePermissionsState.launchMultiplePermissionRequest() }) {
+                    Button(onClick = {
+                        multiplePermissionsState.launchMultiplePermissionRequest()
+                        viewModel.showSnackbar("Requesting record audio and camera permissions", "Dismiss")
+                    }
+                    ) {
                         Text(
                             text = "Request record audio and camera permissions",
                             color = Color.White
