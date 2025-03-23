@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import app.unicornapp.unicorncrm.SnackbarEvent
+import app.unicornapp.unicorncrm.SnackbarManager
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
 import app.unicornapp.unicorncrm.presentation.PermissionsViewModel
 import app.unicornapp.unicorncrm.ui.screens.destinations.MainScreenDrawerNavigationDestination
@@ -44,6 +47,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Destination
@@ -84,6 +88,8 @@ fun PermissionsScreen(
         mutableStateOf(false)
     }
 
+    val scope = rememberCoroutineScope()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -118,7 +124,6 @@ fun PermissionsScreen(
             }
             Button(
                 onClick = {
-
                     navigator.navigate(
                         MainScreenDrawerNavigationDestination()
                     )
@@ -221,16 +226,24 @@ fun PermissionsScreen(
                         "Request location permissions"
                     }
 
-                    Text(
-                        text = textToShow,
-                        color = Color.White
-                    )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { locationPermissionsState.launchMultiplePermissionRequest() }) {
+                    Button(onClick =
+                        {
+                            locationPermissionsState.launchMultiplePermissionRequest()
+                            scope.launch {
+                                SnackbarManager.sendEvent(
+                                    event = SnackbarEvent(
+                                        message = "Launching Multiple Permission Request"
+                                    )
+                                )
+                            }
+                        }
+                    ) {
                         Text(
                             text = buttonText,
                             color = Color.White
                         )
+
                     }
                 }
             }
