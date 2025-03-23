@@ -3,6 +3,7 @@
 
 ## Screenshots
 
+<img src="https://github.com/arunabhdas/UnicornCRM/blob/main/screenshots/snackbar_global_demo_1.gif?raw=true" width="300"/>
 <img src="https://github.com/arunabhdas/UnicornCRM/blob/main/screenshots/UnicornCRM_permissions.gif" width="300"/>
 <img src="https://github.com/arunabhdas/UnicornCRM/blob/main/screenshots/screenshot_1_framed.png" width="300"/>
 
