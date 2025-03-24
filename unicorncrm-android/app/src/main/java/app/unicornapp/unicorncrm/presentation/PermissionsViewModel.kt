@@ -26,18 +26,18 @@ class PermissionsViewModel: ViewModel() {
         composeColor = randomColor
     }
 
-    fun showSnackbar() {
+    fun showSnackbar(messageInitial: String, messageAfterAction: String) {
         viewModelScope.launch {
             SnackbarManager.sendEvent(
                 event = SnackbarEvent(
-                    message = "Please check permissions",
+                    message = messageInitial,
                     action = SnackbarAction(
                         name = "Check",
                         action = {
                             viewModelScope.launch {
                             SnackbarManager.sendEvent(
                                 event = SnackbarEvent(
-                                    message = "Checking permissions"
+                                    message = messageAfterAction
                                 )
                             )
                         }

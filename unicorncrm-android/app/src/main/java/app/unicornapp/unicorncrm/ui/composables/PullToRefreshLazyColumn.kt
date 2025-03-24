@@ -21,13 +21,13 @@ fun <T> PullToRefreshLazyColumn(
     items: List<T>,
     content: @Composable (T) -> Unit,
     isRefreshing: Boolean,
-    oRefresh: () -> Unit,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState()
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
     Box(
-        modifier = Modifier
+        modifier = modifier
     ) {
         LazyColumn(
             state = lazyListState,

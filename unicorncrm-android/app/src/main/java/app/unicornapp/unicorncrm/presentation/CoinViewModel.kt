@@ -20,6 +20,10 @@ class CoinViewModel(private val repository: CoinRepository) : ViewModel() {
         fetchCoins()
     }
 
+    fun refreshCoins() {
+        fetchCoins()
+    }
+
     private fun fetchCoins() {
         viewModelScope.launch {
             try {
