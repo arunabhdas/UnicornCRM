@@ -64,20 +64,6 @@ fun HomeScreen(
                 color = Color.White
             )
         } else {
-
-            /*  TODO-FIXME-CLEANUP
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .statusBarsPadding()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 56.dp)
-            ) {
-                items(coins) { coin ->
-                    CoinCard(coin)
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-            }
-            */
             PullToRefreshLazyColumn(
                 items = coins,
                 content = { coin ->
