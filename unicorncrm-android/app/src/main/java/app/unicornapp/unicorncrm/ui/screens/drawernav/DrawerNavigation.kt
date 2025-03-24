@@ -69,7 +69,7 @@ fun DrawerBody(
                 .padding(top = 48.dp, start = 32.dp, end = 32.dp)
         ) {
             Image(
-                painterResource(id = R.drawable.appicon_old),
+                painterResource(id = R.drawable.appicon),
                 contentDescription = "",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier

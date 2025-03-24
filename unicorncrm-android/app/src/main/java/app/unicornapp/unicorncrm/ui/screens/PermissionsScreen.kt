@@ -2,6 +2,7 @@ package app.unicornapp.unicorncrm.ui.screens
 
 import android.Manifest
 import android.bluetooth.le.BluetoothLeScanner
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material3.Text
@@ -23,12 +25,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import app.unicornapp.unicorncrm.R
 import app.unicornapp.unicorncrm.SnackbarEvent
 import app.unicornapp.unicorncrm.SnackbarManager
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
@@ -109,6 +114,14 @@ fun PermissionsScreen(
                 .padding(horizontal = 0.dp)
                 .padding(vertical = 8.dp)
         ) {
+            Image(
+                painterResource(id = R.drawable.appicon),
+                contentDescription = "",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(60.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
 
@@ -178,6 +191,7 @@ fun PermissionsScreen(
                 )
             } else {
                 Column {
+
                     Text(text =
                         getTextToShowGivenPermissions(
                             multiplePermissionsState.revokedPermissions,
