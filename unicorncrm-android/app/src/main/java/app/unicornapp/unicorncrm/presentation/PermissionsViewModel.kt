@@ -18,7 +18,7 @@ class PermissionsViewModel: ViewModel() {
     val stateFlowColor = _stateFlowColor.asStateFlow()
 
     var composeColor by mutableStateOf(0xFFFFFFFF)
-        private set
+    private set
 
     fun generateNewColor() {
         val randomColor = Random.nextLong(0xFFFFFFFF)
@@ -26,25 +26,26 @@ class PermissionsViewModel: ViewModel() {
         composeColor = randomColor
     }
 
-    fun showSnackbar(message: String, actionMessage: String) {
+    fun showSnackbar() {
         viewModelScope.launch {
             SnackbarManager.sendEvent(
                 event = SnackbarEvent(
-                    message = message,
+                    message = "Please check permissions",
                     action = SnackbarAction(
                         name = "Check",
                         action = {
                             viewModelScope.launch {
-                                SnackbarManager.sendEvent(
-                                    event = SnackbarEvent(
-                                        message = actionMessage
-                                    )
+                            SnackbarManager.sendEvent(
+                                event = SnackbarEvent(
+                                    message = "Checking permissions"
                                 )
-                            }
+                            )
+                        }
                         }
                     )
                 )
             )
         }
     }
+
 }

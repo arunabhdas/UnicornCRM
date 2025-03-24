@@ -11,8 +11,9 @@ import androidx.compose.material3.Text
 import app.unicornapp.unicorncrm.data.model.CoinPaprikaCoin
 
 @Composable
-fun PullToRefreshLazyList(
-    items: List<CoinPaprikaCoin>,
+fun <T> PullToRefreshLazyList(
+    items: List<T>,
+    content: @Composable (T) -> Unit,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier
@@ -26,7 +27,7 @@ fun PullToRefreshLazyList(
             Modifier.fillMaxSize()
         ) {
             items(items) { item ->
-                ListItem( { Text(text = item.name) })
+                content(item)
             }
         }
     }

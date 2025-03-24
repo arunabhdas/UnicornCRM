@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import app.unicornapp.unicorncrm.data.model.CoinPaprikaCoin
 import app.unicornapp.unicorncrm.presentation.CoinViewModel
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
+import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyColumn
 import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
 import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.ramcosta.composedestinations.annotation.Destination
@@ -63,6 +64,8 @@ fun HomeScreen(
                 color = Color.White
             )
         } else {
+
+            /*  TODO-FIXME-CLEANUP
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -74,6 +77,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
+            */
         }
     }
 }
