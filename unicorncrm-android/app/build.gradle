@@ -68,9 +68,8 @@ dependencies {
     // Material and Material Extended
     implementation 'androidx.compose.material:material'
     implementation "androidx.compose.material:material-icons-extended"
-    def material3_version = "1.1.2"
-    implementation "androidx.compose.material3:material3:$material3_version"
-    implementation "androidx.compose.material3:material3-window-size-class:$material3_version"
+    implementation "androidx.compose.material3:material3"
+    implementation "androidx.compose.material3:material3-window-size-class"
 
     // Compose
     implementation 'androidx.activity:activity-compose'
