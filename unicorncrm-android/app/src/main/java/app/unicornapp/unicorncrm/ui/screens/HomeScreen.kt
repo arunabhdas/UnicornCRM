@@ -40,7 +40,8 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     navController: NavController,
     navigator: DestinationsNavigator,
-    viewModel: CoinViewModel = koinViewModel<CoinViewModel>()
+    viewModel: CoinViewModel = koinViewModel<CoinViewModel>(),
+
 ) {
     val coins by viewModel.coinList.collectAsStateWithLifecycle(initialValue = emptyList())
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = true)
