@@ -32,7 +32,7 @@ fun CustomAppBar(
             onClick = onNavigationIconClick
         ) {
             Image(
-                painter = painterResource(id = R.drawable.appicon),
+                painter = painterResource(id = R.drawable.hamburger_inverse),
                 contentDescription = "Menu Icon",
                 modifier = Modifier.size(24.dp)
             )
