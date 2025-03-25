@@ -7,6 +7,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.AccountBalanceWallet
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,10 +44,17 @@ fun MainScreenDrawerNavigation(
                 items = listOf(
                     MenuItem(
                         id = "home",
-                        title = "Home",
-                        route = "home_screen",
-                        contentDescription = "Navigate to Home",
-                        icon = Icons.Default.Home
+                        title = "Movies",
+                        route = "movies_screen",
+                        contentDescription = "Navigate to Movies",
+                        icon = Icons.Outlined.Favorite
+                    ),
+                    MenuItem(
+                        id = "rates",
+                        title = "Rates",
+                        route = "rates_screen",
+                        contentDescription = "Navigate to Rates",
+                        icon = Icons.Outlined.AccountBalanceWallet
                     ),
                     MenuItem(
                         id = "settings",
@@ -96,6 +105,6 @@ fun MainScreenDrawerNavigationPreview() {
     MainScreenDrawerNavigation(
         navController = rememberNavController(),
         navigator = MockDestinationsNavigator(),
-        titles = listOf("One", "Two", "Three")
+        titles = listOf("Movies", "Rates", "Settings", "Notifications")
     )
 }

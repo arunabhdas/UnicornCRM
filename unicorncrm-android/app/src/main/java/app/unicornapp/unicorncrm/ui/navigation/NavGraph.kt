@@ -5,9 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import app.unicornapp.unicorncrm.data.model.settingsOptionsList
-import app.unicornapp.unicorncrm.ui.screens.HomeScreen
+import app.unicornapp.unicorncrm.ui.screens.MoviesScreen
 import app.unicornapp.unicorncrm.ui.screens.NotificationScreen
 import app.unicornapp.unicorncrm.ui.screens.SettingsScreen
+import app.unicornapp.unicorncrm.ui.screens.RatesScreen
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
@@ -17,13 +18,22 @@ fun SetupDrawerNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = ScreenDrawer.HomeScreen.route
+        startDestination = ScreenDrawer.MoviesScreen.route
     ) {
+        // TODO - Adde MoviesScreen
+        composable(
+            route = ScreenDrawer.MoviesScreen.route
+        ) {
+            MoviesScreen(
+                navController = navController,
+                navigator = navigator
+            )
+        }
 
         composable(
-            route = ScreenDrawer.HomeScreen.route
+            route = ScreenDrawer.RatesScreen.route
         ) {
-            HomeScreen(
+            RatesScreen(
                 navController = navController,
                 navigator = navigator
             )
@@ -32,7 +42,6 @@ fun SetupDrawerNavGraph(
         composable(
             route = ScreenDrawer.SettingsScreen.route
         ) {
-            // TODO-Pass settingsOptionsList to SetttingsScreen
             SettingsScreen(
                 navController = navController,
                 navigator = navigator,

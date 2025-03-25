@@ -9,12 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,7 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Destination
 @Composable
-fun HomeScreen(
+fun RatesScreen(
     navController: NavController,
     navigator: DestinationsNavigator,
     viewModel: CoinViewModel = koinViewModel<CoinViewModel>(),
@@ -97,8 +94,8 @@ fun CoinCard(coin: CoinPaprikaCoin) {
 
 @Preview
 @Composable
-fun HomeScreenPreview() {
-   HomeScreen(
+fun RatesScreenPreview() {
+   RatesScreen(
        navController = rememberNavController(),
        navigator = MockDestinationsNavigator()
    )
