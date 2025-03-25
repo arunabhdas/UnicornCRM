@@ -1,4 +1,4 @@
-package app.unicornapp.unicorncrm.movielist.data.model
+package app.unicornapp.unicorncrm.movielist.data.remote
 
 data class MovieListDto(
     val page: Int,
