@@ -87,7 +87,14 @@ fun PermissionsScreen(
     val stateFlowColor = viewModel.stateFlowColor.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = "LandingScreenAppeared") {
-        Timber.d( "route: LandingScreen")
+        Timber.d( "route: PermissionsScreen")
+        viewModel.showSnackbar(
+            messageInitial = getTextToShowGivenPermissions(
+                multiplePermissionsState.revokedPermissions,
+                multiplePermissionsState.shouldShowRationale
+            ),
+            messageAfterAction = "Dismiss"
+        )
     }
     var showExpandedText by remember {
         mutableStateOf(false)
@@ -163,12 +170,6 @@ fun PermissionsScreen(
                     } else {
                         "Camera not available"
                     }
-
-                    Text(
-                        text = textToShow,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
                     Button(
                         onClick = { cameraPermissionState.launchPermissionRequest() },
                         colors = ButtonDefaults.buttonColors(
@@ -176,7 +177,7 @@ fun PermissionsScreen(
                         )
                     ) {
                         Text(
-                            text = "Request permission",
+                            text = "Request camera permission",
                             color = Color.White
                         )
                     }
@@ -191,15 +192,6 @@ fun PermissionsScreen(
                 )
             } else {
                 Column {
-
-                    Text(text =
-                        getTextToShowGivenPermissions(
-                            multiplePermissionsState.revokedPermissions,
-                            multiplePermissionsState.shouldShowRationale
-                        ),
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = {
                         multiplePermissionsState.launchMultiplePermissionRequest()
                         viewModel.showSnackbar(
