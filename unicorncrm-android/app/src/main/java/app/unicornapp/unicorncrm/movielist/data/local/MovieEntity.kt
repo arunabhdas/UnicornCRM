@@ -1,10 +1,14 @@
 package app.unicornapp.unicorncrm.movielist.data.local
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 
+@Entity
 data class MovieEntity(
     val adult: Boolean,
     val backdrop_path: String,
+    @TypeConverters(IntListConverter::class)
     val genre_ids: List<Int>,
     val original_language: String,
     val original_title: String,
