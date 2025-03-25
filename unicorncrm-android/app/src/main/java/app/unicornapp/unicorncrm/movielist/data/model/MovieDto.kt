@@ -1,6 +1,6 @@
 package app.unicornapp.unicorncrm.movielist.data.model
 
-data class Movie(
+data class MovieDto(
     val adult: Boolean,
     val backdrop_path: String,
     val genre_ids: List<Int>,
