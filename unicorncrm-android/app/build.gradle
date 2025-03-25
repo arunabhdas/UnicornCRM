@@ -6,6 +6,19 @@ plugins {
     id 'com.google.devtools.ksp' version '1.8.20-1.0.11'
 }
 
+// Load the properties file
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+// Define API key with a default empty value if not found
+def tmdbApiKey = localProperties.getProperty('TMDB_ORG_API_KEY') ?: ""
+
+
 android {
     namespace 'app.unicornapp.unicorncrm'
     compileSdk 34
@@ -16,7 +29,7 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
+        buildConfigField "String", "TMDB_ORG_API_KEY", "\"${tmdbApiKey}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
