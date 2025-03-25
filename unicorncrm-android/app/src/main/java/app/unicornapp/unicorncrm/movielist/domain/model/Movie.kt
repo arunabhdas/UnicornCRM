@@ -1,8 +1,9 @@
-package app.unicornapp.unicorncrm.movielist.data.local
+package app.unicornapp.unicorncrm.movielist.domain.model
+
 
 import androidx.room.PrimaryKey
 
-data class MovieEntity(
+data class Movie(
     val adult: Boolean,
     val backdrop_path: String,
     val genre_ids: List<Int>,
@@ -16,8 +17,6 @@ data class MovieEntity(
     val video: Boolean,
     val vote_average: Double,
     val vote_count: Int,
-
-    @PrimaryKey
     val id: Int,
     val category: String
 )
