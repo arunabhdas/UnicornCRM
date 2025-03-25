@@ -109,7 +109,7 @@ fun LandingScreen(
                     backgroundColor = TertiaryColor
                 )
             ) {
-                Text(text = "Go to Permissions")
+                Text(text = "Get Started")
             }
         }
     }
