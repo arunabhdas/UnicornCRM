@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -46,6 +47,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import app.unicornapp.unicorncrm.R
 import app.unicornapp.unicorncrm.presentation.MockDefaultViewModel
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
 import app.unicornapp.unicorncrm.presentation.DefaultViewModel
@@ -96,6 +98,14 @@ fun LandingScreen(
                 .fillMaxSize()
                 .padding(horizontal = 0.dp)
         ) {
+            Image(
+                painterResource(id = R.drawable.appicon),
+                contentDescription = "",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(60.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
                     navigator.navigate(
