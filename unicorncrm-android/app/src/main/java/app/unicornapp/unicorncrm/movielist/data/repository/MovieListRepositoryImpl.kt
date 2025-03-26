@@ -68,7 +68,6 @@ class MovieListRepositoryImply @Inject constructor(
                 }
             ))
             emit(Resource.Loading(false))
-            return@flow
         }
     }
 
