@@ -26,10 +26,11 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var navHostController: NavHostController
     private val viewModel: DefaultViewModel by viewModels()
