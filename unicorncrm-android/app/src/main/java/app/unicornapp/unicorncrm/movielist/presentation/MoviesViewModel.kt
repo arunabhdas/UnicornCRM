@@ -25,6 +25,10 @@ class MoviesViewModel @Inject constructor(
         getUpcomingMovieList(false)
     }
 
+    fun refreshMovies() {
+        getPopularMovieList(true)
+    }
+
     fun onEvent(event: MovieListUiEvent) {
        when(event) {
            MovieListUiEvent.Navigate -> {
