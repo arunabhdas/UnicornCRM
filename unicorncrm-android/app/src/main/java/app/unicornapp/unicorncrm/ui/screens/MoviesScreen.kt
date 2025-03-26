@@ -60,7 +60,7 @@ fun MoviesScreen(
 @Preview
 @Composable
 fun MoviesScreenPreview() {
-   NotificationScreen(
+   MoviesScreen(
        navController = rememberNavController(),
        navigator = MockDestinationsNavigator()
    )
