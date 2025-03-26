@@ -21,8 +21,8 @@ class MoviesViewModel @Inject constructor(
     val movieListState = _movieListState.asStateFlow()
 
     init {
-        getPopularMovieList(false)
-        getUpcomingMovieList(false)
+        getPopularMovieList(true)
+        getUpcomingMovieList(true)
     }
 
     fun refreshMovies() {
