@@ -13,8 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import app.unicornapp.unicorncrm.movielist.presentation.MoviesViewModel
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
 import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
 import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
@@ -29,7 +31,7 @@ fun MoviesScreen(
     navigator: DestinationsNavigator
 
 ) {
-
+    val movieListViewModel = hiltViewModel<MoviesViewModel>()
     Box(
         modifier = Modifier
             .fillMaxSize()
