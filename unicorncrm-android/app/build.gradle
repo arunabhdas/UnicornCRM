@@ -98,6 +98,9 @@ dependencies {
     implementation "io.github.raamcosta.compose-destinations:core:$compose_destinations_version"
     ksp "io.github.raamcosta.compose-destinations:ksp:$compose_destinations_version"
 
+    // Add OkHttp3 logging interceptor
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
+
     // DI
     def dagger_hilt_version = "2.48"
     implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
