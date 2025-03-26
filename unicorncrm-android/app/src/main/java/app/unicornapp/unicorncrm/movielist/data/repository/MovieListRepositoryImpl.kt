@@ -1,12 +1,16 @@
 package app.unicornapp.unicorncrm.movielist.data.repository
 
 import app.unicornapp.unicorncrm.movielist.data.local.MovieDatabase
+import app.unicornapp.unicorncrm.movielist.data.mappers.toMovie
+import app.unicornapp.unicorncrm.movielist.data.mappers.toMovieEntity
 import app.unicornapp.unicorncrm.movielist.data.remote.MovieApiService
 import app.unicornapp.unicorncrm.movielist.domain.model.Movie
 import app.unicornapp.unicorncrm.movielist.domain.repository.MovieListRepository
 import app.unicornapp.unicorncrm.movielist.util.Resource
+import coil.network.HttpException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.io.IOException
 import javax.inject.Inject
 
 class MovieListRepositoryImply @Inject constructor(
@@ -22,11 +26,49 @@ class MovieListRepositoryImply @Inject constructor(
             emit(Resource.Loading(true))
             val localMovieList = movieDatabase.movieDao.getMovieListByCategory(category)
 
-            val shouldLoadLocalMovie = localMovieList.isEmpty() && !forceFetchFromRemote
+            val shouldLoadLocalMovie = localMovieList.isNotEmpty() && !forceFetchFromRemote
 
+            if (shouldLoadLocalMovie) {
+                emit(Resource.Success(
+                    data = localMovieList.map { movieEntity ->
+                        movieEntity.toMovie(category)
+                    }
+                ))
+                emit(Resource.Loading(false))
+                return@flow
+            }
 
-            // TODO-FIXME-COMPLETE-IMPLEMENTATION
+            val movieListFromApi = try {
+                movieApi.getMoviesList(category, page)
+            } catch (e: IOException) {
+               e.printStackTrace()
+               emit(Resource.Error(message = "Error loading movies"))
+               return@flow
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                emit(Resource.Error(message = "Error loading movies"))
+                return@flow
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Resource.Error(message = "Error loading movies"))
+                return@flow
+            }
 
+            val movieEntities = movieListFromApi.results.let { it ->
+                it.map { movieDto ->
+                    movieDto.toMovieEntity(category)
+                }
+            }
+
+            movieDatabase.movieDao.upsertMovieList(movieEntities)
+
+            emit(Resource.Success(
+                movieEntities.map { it.toMovie(category)
+
+                }
+            ))
+            emit(Resource.Loading(false))
+            return@flow
         }
     }
 

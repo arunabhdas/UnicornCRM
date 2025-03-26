@@ -12,7 +12,7 @@ interface MovieApiService {
         @Path("category") category: String,
         @Query("page") page: Int,
         @Query("api_key") apiKey: String = TMDB_ORG_API_KEY
-    )
+    ): MovieListDto
 
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/3/"
