@@ -11,8 +11,9 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import timber.log.Timber
 import app.unicornapp.unicorncrm.BuildConfig
+import dagger.hilt.android.HiltAndroidApp
 
-
+@HiltAndroidApp
 class UnicornCrmApplication : Application(){
     override fun onCreate() {
         super.onCreate()
