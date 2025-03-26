@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 
-class MovieListRepositoryImply @Inject constructor(
+class MovieListRepositoryImpl @Inject constructor(
     private val movieApi: MovieApiService,
     private val movieDatabase: MovieDatabase
 ): MovieListRepository{
