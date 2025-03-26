@@ -50,7 +50,7 @@ fun MoviesScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Movies",
+            Text("Loading",
                 color = Color.White
             )
         }
