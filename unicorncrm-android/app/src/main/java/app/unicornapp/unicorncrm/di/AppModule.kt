@@ -1,5 +1,8 @@
 package app.unicornapp.unicorncrm.di
 
+import android.app.Application
+import androidx.room.Room
+import app.unicornapp.unicorncrm.movielist.data.local.MovieDatabase
 import app.unicornapp.unicorncrm.movielist.data.remote.MovieApiService
 import dagger.Module
 import dagger.Provides
@@ -24,8 +27,8 @@ object AppModule {
         .addInterceptor(interceptor)
         .build()
 
-    @Singleton
     @Provides
+    @Singleton
     fun providesMovieApiService(): MovieApiService {
        return Retrofit.Builder()
            .addConverterFactory(GsonConverterFactory.create())
@@ -33,6 +36,16 @@ object AppModule {
            .client(client)
            .build()
            .create(MovieApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesMovieDatabase(application: Application): MovieDatabase {
+        return Room.databaseBuilder(
+            application,
+            MovieDatabase::class.java,
+            "movies.db"
+        ).build()
     }
 
 }
