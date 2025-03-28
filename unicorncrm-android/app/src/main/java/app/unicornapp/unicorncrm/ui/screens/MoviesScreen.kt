@@ -33,8 +33,8 @@ import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyColumn
 import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
 import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.ramcosta.composedestinations.annotation.Destination
-
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import app.unicornapp.unicorncrm.ui.screens.destinations.MoviesDetailScreenDestination
 
 @Destination
 @Composable
@@ -65,7 +65,15 @@ fun MoviesScreen(
             PullToRefreshLazyColumn(
                 items = movieListState.popularMovieList,
                 content = { movie ->
-                    MovieCard(movie)
+                    MovieCard(
+                        movie = movie,
+                        onMovieClick = {
+                            // Navigate to detail screen with movie ID
+                            navigator.navigate(MoviesDetailScreenDestination(
+                                movieId = movie.id
+                            ))
+                        }
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                 },
                 isRefreshing = movieListState.isLoading,
@@ -80,7 +88,10 @@ fun MoviesScreen(
 }
 
 @Composable
-fun MovieCard(movie: Movie) {
+fun MovieCard(
+    movie: Movie,
+    onMovieClick: () -> Unit
+) {
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier.fillMaxWidth()

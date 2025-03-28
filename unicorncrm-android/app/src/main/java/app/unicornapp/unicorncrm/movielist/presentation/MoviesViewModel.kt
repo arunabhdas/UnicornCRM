@@ -20,6 +20,10 @@ class MoviesViewModel @Inject constructor(
     private var _movieListState = MutableStateFlow(MovieListState())
     val movieListState = _movieListState.asStateFlow()
 
+    // Add state for movie details
+    private val _movieDetailState = MutableStateFlow(MovieDetailState())
+    val movieDetailState = _movieDetailState.asStateFlow()
+
     init {
         getPopularMovieList(true)
         getUpcomingMovieList(true)
@@ -46,6 +50,28 @@ class MoviesViewModel @Inject constructor(
                }
            }
        }
+    }
+
+    fun getMovieById(id: Int) {
+        viewModelScope.launch {
+            movieListRepository.getMovie(id).collectLatest { result ->
+                when (result) {
+                    is Resource.Loading -> {
+                        _movieDetailState.value = MovieDetailState(isLoading = result.isLoading)
+                    }
+                    is Resource.Success -> {
+                        result.data?.let { movie ->
+                            _movieDetailState.value = MovieDetailState(movie = movie)
+                        }
+                    }
+                    is Resource.Error -> {
+                        _movieDetailState.value = MovieDetailState(
+                            error = result.message ?: "Unknown error occurred"
+                        )
+                    }
+                }
+            }
+        }
     }
     private fun getPopularMovieList(forceFetchFromRemote: Boolean) {
         viewModelScope.launch {
@@ -126,4 +152,6 @@ class MoviesViewModel @Inject constructor(
             }
         }
     }
+
+
 }
