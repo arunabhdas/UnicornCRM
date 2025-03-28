@@ -35,6 +35,7 @@ import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import app.unicornapp.unicorncrm.ui.screens.destinations.MoviesDetailScreenDestination
+import androidx.compose.foundation.clickable
 
 @Destination
 @Composable
@@ -94,7 +95,9 @@ fun MovieCard(
 ) {
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onMovieClick),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = movie.title)

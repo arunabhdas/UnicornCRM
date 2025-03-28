@@ -47,7 +47,7 @@ fun MoviesDetailScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Notifications",
+            Text("Movies Detail Screen",
                 color = Color.White
             )
         }
