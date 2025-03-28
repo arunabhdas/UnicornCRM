@@ -95,6 +95,30 @@ fun PermissionsScreen(
             ),
             messageAfterAction = "Dismiss"
         )
+
+        if (cameraPermissionState.status.isGranted) {
+            SnackbarManager.sendEvent(
+                event = SnackbarEvent(
+                    message = "Camera permission granted"
+                )
+            )
+        }
+
+        if (multiplePermissionsState.allPermissionsGranted) {
+            SnackbarManager.sendEvent(
+                event = SnackbarEvent(
+                    message = "Camera and Read storage permissions granted"
+                )
+            )
+        }
+        if (locationPermissionsState.allPermissionsGranted) {
+            SnackbarManager.sendEvent(
+                event = SnackbarEvent(
+                    message = "Location permissions granted"
+                )
+            )
+
+        }
     }
     var showExpandedText by remember {
         mutableStateOf(false)
@@ -131,19 +155,6 @@ fun PermissionsScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
-
-                },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .background(TransparentColor),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = TertiaryColor
-                )
-            ) {
-                Text(text = "Check Permissions")
-            }
-            Button(
-                onClick = {
                     navigator.navigate(
                         MainScreenDrawerNavigationDestination()
                     )
@@ -159,10 +170,8 @@ fun PermissionsScreen(
             }
             Spacer(modifier = Modifier.height(8.dp))
             if (cameraPermissionState.status.isGranted) {
-                Text(
-                    text = "Camera permission Granted",
-                    color = Color.White
-                )
+                // TODO-FIXME
+                // TODO-FIXME- DO WE NEED ANYTHING HERE?
             } else {
                 Column {
                     val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
@@ -185,11 +194,8 @@ fun PermissionsScreen(
             }
             Spacer(modifier = Modifier.height(8.dp))
             if (multiplePermissionsState.allPermissionsGranted) {
-                // If all permissions are granted, then show screen with the feature enabled
-                Text(
-                    text = "Camera and Read storage permissions Granted! Thank you!",
-                    color = Color.White
-                )
+                // TODO-FIXME
+                // TODO-FIXME- DO WE NEED ANYTHING HERE?
             } else {
                 Column {
                     Button(onClick = {
@@ -208,10 +214,8 @@ fun PermissionsScreen(
                 }
             }
             if (locationPermissionsState.allPermissionsGranted) {
-                Text(
-                    text = "Thanks! I can access your exact location :D",
-                    color = Color.White
-                )
+                // TODO-FIXME
+                // TODO-FIXME- DO WE NEED ANYTHING HERE?
             } else {
                 Column {
                     val allPermissionsRevoked =
