@@ -36,6 +36,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import app.unicornapp.unicorncrm.ui.screens.destinations.MoviesDetailScreenDestination
 import androidx.compose.foundation.clickable
+import app.unicornapp.unicorncrm.ui.navigation.ScreenDrawer
 
 @Destination
 @Composable
@@ -69,10 +70,12 @@ fun MoviesScreen(
                     MovieCard(
                         movie = movie,
                         onMovieClick = {
-                            // Navigate to detail screen with movie ID
-                            navigator.navigate(MoviesDetailScreenDestination(
-                                movieId = movie.id
-                            ))
+                            navController.navigate(
+                                ScreenDrawer.MoviesDetailScreen.route.replace(
+                                    "{movieId}",
+                                    movie.id.toString()
+                                )
+                            )
                         }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
