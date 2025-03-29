@@ -27,6 +27,7 @@ import app.unicornapp.unicorncrm.ui.theme.createGradientEffect
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import app.unicornapp.unicorncrm.ui.composables.MovieCard
+import app.unicornapp.unicorncrm.ui.composables.MovieCardItem
 import app.unicornapp.unicorncrm.ui.navigation.ScreenDrawer
 
 @Destination
@@ -56,9 +57,24 @@ fun MoviesUpcomingScreen(
             )
         } else {
             PullToRefreshLazyColumn(
-                items = movieListState.popularMovieList,
+                items = movieListState.upcomingMovieList,
                 content = { movie ->
+
+                    /* TODO-FIXME-REVER
                     MovieCard(
+                        movie = movie,
+                        onMovieClick = {
+                            navController.navigate(
+                                ScreenDrawer.MoviesDetailScreen.route.replace(
+                                    "{movieId}",
+                                    movie.id.toString()
+                                )
+                            )
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    */
+                    MovieCardItem(
                         movie = movie,
                         onMovieClick = {
                             navController.navigate(
