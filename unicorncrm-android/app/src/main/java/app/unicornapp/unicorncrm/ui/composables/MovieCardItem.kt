@@ -137,8 +137,8 @@ fun MovieCardItem(
             Text(
                 modifier = Modifier.padding(start = 4.dp),
                 text = movie.vote_average.toString().take(3),
-                color = Color.White,
-                fontSize = 15.sp,
+                color = Color.LightGray,
+                fontSize = 14.sp,
                 maxLines = 1
             )
         }
