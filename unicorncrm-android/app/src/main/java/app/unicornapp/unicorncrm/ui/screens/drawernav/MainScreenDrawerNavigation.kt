@@ -44,9 +44,16 @@ fun MainScreenDrawerNavigation(
                 items = listOf(
                     MenuItem(
                         id = "home",
-                        title = "Movies",
+                        title = "Upcoming",
                         route = "movies_screen",
-                        contentDescription = "Navigate to Movies",
+                        contentDescription = "Navigate to Popular Movies",
+                        icon = Icons.Outlined.Favorite
+                    ),
+                    MenuItem(
+                        id = "home",
+                        title = "Popular",
+                        route = "movies_popular_screen",
+                        contentDescription = "Navigate to Popular Movies",
                         icon = Icons.Outlined.Favorite
                     ),
                     MenuItem(
