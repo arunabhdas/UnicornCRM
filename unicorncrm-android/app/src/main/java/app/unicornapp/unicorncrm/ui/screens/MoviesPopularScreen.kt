@@ -31,7 +31,7 @@ import app.unicornapp.unicorncrm.ui.composables.MovieCard
 
 @Destination
 @Composable
-fun MoviesScreen(
+fun MoviesPopularScreen(
     navController: NavController,
     navigator: DestinationsNavigator
 
@@ -86,8 +86,8 @@ fun MoviesScreen(
 
 @Preview
 @Composable
-fun MoviesScreenPreview() {
-   MoviesScreen(
+fun MoviesPopularScreenPreview() {
+   MoviesPopularScreen(
        navController = rememberNavController(),
        navigator = MockDestinationsNavigator()
    )

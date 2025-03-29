@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import app.unicornapp.unicorncrm.data.model.settingsOptionsList
 import app.unicornapp.unicorncrm.ui.screens.MoviesDetailScreen
-import app.unicornapp.unicorncrm.ui.screens.MoviesScreen
+import app.unicornapp.unicorncrm.ui.screens.MoviesPopularScreen
 import app.unicornapp.unicorncrm.ui.screens.MoviesUpcomingScreen
 import app.unicornapp.unicorncrm.ui.screens.NotificationScreen
 import app.unicornapp.unicorncrm.ui.screens.SettingsScreen
@@ -22,13 +22,13 @@ fun SetupDrawerNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = ScreenDrawer.MoviesScreen.route
+        startDestination = ScreenDrawer.MoviesPopularScreen.route
     ) {
         // TODO - Adde MoviesScreen
         composable(
-            route = ScreenDrawer.MoviesScreen.route
+            route = ScreenDrawer.MoviesPopularScreen.route
         ) {
-            MoviesScreen(
+            MoviesPopularScreen(
                 navController = navController,
                 navigator = navigator
             )

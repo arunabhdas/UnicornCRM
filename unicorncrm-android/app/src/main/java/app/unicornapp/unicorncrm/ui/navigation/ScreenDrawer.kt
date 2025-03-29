@@ -1,7 +1,7 @@
 package app.unicornapp.unicorncrm.ui.navigation
 
 sealed class ScreenDrawer {
-    object MoviesScreen: Screen(route = "movies_screen")
+    object MoviesPopularScreen: Screen(route = "movies_popular_screen")
     object MoviesUpcomingScreen: Screen(route = "movies_upcoming_screen")
     object RatesScreen: Screen(route = "rates_screen")
     object SettingsScreen: Screen(route = "settings_screen")

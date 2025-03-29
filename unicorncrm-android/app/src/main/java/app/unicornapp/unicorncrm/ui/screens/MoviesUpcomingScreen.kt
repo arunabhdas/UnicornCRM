@@ -87,7 +87,7 @@ fun MoviesUpcomingScreen(
 @Preview
 @Composable
 fun MoviesUpcomingScreenPreview() {
-   MoviesScreen(
+   MoviesUpcomingScreen(
        navController = rememberNavController(),
        navigator = MockDestinationsNavigator()
    )
