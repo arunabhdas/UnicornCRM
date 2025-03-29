@@ -49,10 +49,10 @@ fun SetupDrawerNavGraph(
             )
         }
 
-        // TODO - Adde MoviesPopularScreen
+        // TODO-FIXME - MoviesUpcomingScreen
 
         composable(
-            route = ScreenDrawer.MoviesPopularScreen.route
+            route = ScreenDrawer.MoviesUpcomingScreen.route
         ) {
             MoviesUpcomingScreen(
                 navController = navController,
