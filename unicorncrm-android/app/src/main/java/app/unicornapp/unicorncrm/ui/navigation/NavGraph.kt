@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import app.unicornapp.unicorncrm.data.model.settingsOptionsList
 import app.unicornapp.unicorncrm.ui.screens.MoviesDetailScreen
 import app.unicornapp.unicorncrm.ui.screens.MoviesScreen
+import app.unicornapp.unicorncrm.ui.screens.MoviesPopularScreen
 import app.unicornapp.unicorncrm.ui.screens.NotificationScreen
 import app.unicornapp.unicorncrm.ui.screens.SettingsScreen
 import app.unicornapp.unicorncrm.ui.screens.RatesScreen
@@ -43,6 +44,17 @@ fun SetupDrawerNavGraph(
             val movieId = backStackEntry.arguments?.getInt("movieId") ?: 0
             MoviesDetailScreen(
                 movieId = movieId,
+                navController = navController,
+                navigator = navigator
+            )
+        }
+
+        // TODO - Adde MoviesPopularScreen
+
+        composable(
+            route = ScreenDrawer.MoviesPopularScreen.route
+        ) {
+            MoviesPopularScreen(
                 navController = navController,
                 navigator = navigator
             )
