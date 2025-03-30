@@ -65,15 +65,7 @@ fun MoviesPopularScreen(
                 content = { index, movie ->
                     MovieCardItem(
                         movie = movie,
-                        onMovieClick = {
-                            Timber.d("---MoviesPopularScreen about to navigate to MoviesDetailScreen---")
-                            navController.navigate(
-                                ScreenDrawer.MoviesDetailScreen.route.replace(
-                                    "{movieId}",
-                                    movie.id.toString()
-                                )
-                            )
-                        }
+                        navController = navController
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     val isNearEnd = index >= movieListState.popularMovieList.size - 1

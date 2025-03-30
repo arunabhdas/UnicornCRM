@@ -62,14 +62,7 @@ fun MoviesUpcomingScreen(
                 content = { movie ->
                     MovieCardItem(
                         movie = movie,
-                        onMovieClick = {
-                            navController.navigate(
-                                ScreenDrawer.MoviesDetailScreen.route.replace(
-                                    "{movieId}",
-                                    movie.id.toString()
-                                )
-                            )
-                        }
+                        navController = navController
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 },

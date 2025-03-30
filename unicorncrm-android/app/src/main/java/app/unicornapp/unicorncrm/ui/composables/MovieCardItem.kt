@@ -50,7 +50,7 @@ import app.unicornapp.unicorncrm.movielist.util.RatingBar
 @Composable
 fun MovieCardItem(
     movie: Movie,
-    onMovieClick: () -> Unit
+    navController: NavController,
 ) {
     val imageState = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -79,7 +79,12 @@ fun MovieCardItem(
                 )
             )
             .clickable {
-                // TODO-FIXME-CLEANUP
+                navController.navigate(
+                    ScreenDrawer.MoviesDetailScreen.route.replace(
+                        "{movieId}",
+                        movie.id.toString()
+                    )
+                )
             }
     ) {
         if (imageState is AsyncImagePainter.State.Error) {
