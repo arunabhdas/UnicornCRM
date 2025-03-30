@@ -37,7 +37,7 @@ class CoinRepository(private val apiService: CoinPaprikaApiService) {
                     // Check if USD quote is available
                     val usdQuote = ticker.quotes["USD"]
                     if (usdQuote != null) {
-                        Timber.d("CoinRepository: Found USD price for ${coin.name}: $${usdQuote.price}")
+                        // TODO-FIXME-CLEANUP Timber.d("CoinRepository: Found USD price for ${coin.name}: $${usdQuote.price}")
                         CoinWithPrice(
                             id = coin.id,
                             name = coin.name,
