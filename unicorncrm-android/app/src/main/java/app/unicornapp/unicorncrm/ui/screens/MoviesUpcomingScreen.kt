@@ -28,6 +28,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import app.unicornapp.unicorncrm.ui.composables.MovieCard
 import app.unicornapp.unicorncrm.ui.composables.MovieCardItem
+import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyVerticalGrid
 import app.unicornapp.unicorncrm.ui.navigation.ScreenDrawer
 
 @Destination
@@ -56,24 +57,9 @@ fun MoviesUpcomingScreen(
                 color = Color.White
             )
         } else {
-            PullToRefreshLazyColumn(
+            PullToRefreshLazyVerticalGrid(
                 items = movieListState.upcomingMovieList,
                 content = { movie ->
-
-                    /* TODO-FIXME-REVER
-                    MovieCard(
-                        movie = movie,
-                        onMovieClick = {
-                            navController.navigate(
-                                ScreenDrawer.MoviesDetailScreen.route.replace(
-                                    "{movieId}",
-                                    movie.id.toString()
-                                )
-                            )
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    */
                     MovieCardItem(
                         movie = movie,
                         onMovieClick = {
