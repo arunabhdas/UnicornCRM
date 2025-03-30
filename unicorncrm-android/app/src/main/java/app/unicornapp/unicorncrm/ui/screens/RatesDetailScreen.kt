@@ -58,6 +58,11 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.graphicsLayer
 import kotlin.random.Random
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.util.VelocityTracker
+import kotlin.math.absoluteValue
 
 @Destination
 @Composable
@@ -103,6 +108,11 @@ fun RatesDetailScreen(
     val minValue = remember(chartPoints) { chartPoints.minOrNull() ?: 0.0 }
     val maxValue = remember(chartPoints) { chartPoints.maxOrNull() ?: 100.0 }
     
+    // Handle system back button
+    BackHandler {
+        navController.popBackStack()
+    }
+    
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -111,7 +121,21 @@ fun RatesDetailScreen(
                     colors = ThemeUtils.GradientColors,
                     isVertical = true
                 )
-            ),
+            )
+            // Add edge swipe detection for back navigation
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures { change, dragAmount ->
+                    // Get the absolute position of the touch
+                    val touchX = change.position.x
+                    
+                    // Only respond to right swipes starting from the left edge (within 40dp from edge)
+                    if (touchX < 40.dp.toPx() && dragAmount > 0) {
+                        if (dragAmount > 10) { // Require minimum swipe distance
+                            navController.popBackStack()
+                        }
+                    }
+                }
+            },
     ) {
         // Top app bar with back button
         Row(
@@ -123,7 +147,15 @@ fun RatesDetailScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = { navigator.navigateUp() }
+                onClick = { 
+                    // Try both navigation methods to ensure one works
+                    try {
+                        // TODO-FIXME-CLEANUP navigator.navigateUp()
+                        navController.popBackStack()
+                    } catch (e: Exception) {
+                        navController.popBackStack()
+                    }
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -324,7 +356,7 @@ fun RatesDetailScreen(
                     StatRow("Circulating Supply", "${formatLargeNumber(80000000.0)} $coinSymbol")
                     Divider(modifier = Modifier.padding(vertical = 12.dp), color = Color.LightGray.copy(alpha = 0.3f))
                     
-                    StatRow("All-Time High", "$${String.format("%,.2f", price?.times(1.5) ?: 0.0)}")
+                    StatRow("All-Time High", "$${String.format("%.2f", price?.times(1.5) ?: 0.0)}")
                 }
             }
             
