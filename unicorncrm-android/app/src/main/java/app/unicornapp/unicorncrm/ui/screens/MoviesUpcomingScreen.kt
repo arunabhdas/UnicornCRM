@@ -19,7 +19,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import app.unicornapp.unicorncrm.movielist.presentation.MovieListUiEvent
 import app.unicornapp.unicorncrm.movielist.presentation.MoviesViewModel
+import app.unicornapp.unicorncrm.movielist.util.Category
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
 import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyColumn
 import app.unicornapp.unicorncrm.ui.theme.ThemeUtils
@@ -29,7 +31,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import app.unicornapp.unicorncrm.ui.composables.MovieCard
 import app.unicornapp.unicorncrm.ui.composables.MovieCardItem
 import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyVerticalGrid
+import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyVerticalGridIndexed
 import app.unicornapp.unicorncrm.ui.navigation.ScreenDrawer
+import timber.log.Timber
 
 @Destination
 @Composable
@@ -57,14 +61,20 @@ fun MoviesUpcomingScreen(
                 color = Color.White
             )
         } else {
-            PullToRefreshLazyVerticalGrid(
+            PullToRefreshLazyVerticalGridIndexed(
                 items = movieListState.upcomingMovieList,
-                content = { movie ->
+                content = { index, movie ->
                     MovieCardItem(
                         movie = movie,
                         navController = navController
                     )
                     Spacer(modifier = Modifier.height(8.dp))
+                    val isNearEnd = index >= movieListState.upcomingMovieList.size - 1
+                    if (isNearEnd && !movieListState.isLoading) {
+                        Timber.d("---MoviesUpcomingScreen about to call movieListViewModel.onEvent---")
+                        // TODO-FIXME-CLEANUP-IMPROVE onEvent(MovieListUiEvent.Paginate(Category.UPCOMING))
+                        movieListViewModel.onEvent(MovieListUiEvent.Paginate(Category.POPULAR))
+                    }
                 },
                 isRefreshing = movieListState.isLoading,
                 onRefresh = { movieListViewModel.refreshMovies() },
