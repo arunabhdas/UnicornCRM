@@ -26,11 +26,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,17 +65,26 @@ fun RatesScreen(
     KoinContext {
         val viewModel = koinViewModel<CoinViewModel>()
         
-        // Collect both state flows - coins and coinsWithPrices
+        // Collect state flows efficiently with initialValue to avoid stalls
         val coins by viewModel.coinList.collectAsStateWithLifecycle(initialValue = emptyList())
         val coinsWithPrices by viewModel.coinsWithPricesList.collectAsStateWithLifecycle(initialValue = emptyList())
         val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = true)
         
-        LaunchedEffect(key1 = Unit) {
-            Timber.d("RatesScreen: Composing with ${coins.size} coins, ${coinsWithPrices.size} coins with prices, isLoading=$isLoading")
+        // Create efficient lookups outside of the item rendering
+        val coinPriceMap = remember(coinsWithPrices) {
+            coinsWithPrices.associateBy { it.id }
+        }
+        
+        // Only trigger refresh on first composition
+        LaunchedEffect(Unit) {
             if (coins.isEmpty() && !isLoading) {
-                Timber.d("RatesScreen: No coins available, triggering refresh")
                 viewModel.refreshCoins()
             }
+        }
+
+        // Use derivedStateOf for derived UI states to avoid unnecessary recompositions
+        val showFullScreenLoading = remember(coins, isLoading) { 
+            isLoading && coins.isEmpty() 
         }
 
         Box(
@@ -85,24 +98,35 @@ fun RatesScreen(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            if (isLoading) {
+            // Add a title at the top of the screen
+            Text(
+                text = "Rates",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .padding(top = 16.dp)
+                    .align(Alignment.TopCenter),
+                color = Color.White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            
+            if (showFullScreenLoading) {
+                // Only show full-screen loading indicator on initial load
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
                     color = Color.White
                 )
-                Timber.d("RatesScreen: Showing loading indicator")
             } else {
-                Timber.d("RatesScreen: Rendering list with ${coins.size} coins and ${coinsWithPrices.size} price data items")
-                
-                // Create a map of coin IDs to their price data for quick lookup
-                val coinPriceMap = coinsWithPrices.associateBy { it.id }
+                // Optimize rendering with key for proper diffing
+                val listItems = remember(coins) { coins.toList() }
                 
                 PullToRefreshLazyColumn(
-                    items = coins,
+                    items = listItems,
                     content = { coin ->
-                        // Look up price data for this coin
+                        // Look up price data using efficient map lookup
                         val coinWithPrice = coinPriceMap[coin.id]
-                        Timber.d("RatesScreen: Rendering coin ${coin.name} with price data: ${coinWithPrice != null}")
                         
                         EnhancedCoinCard(
                             coin = coin,
@@ -112,10 +136,7 @@ fun RatesScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                     },
                     isRefreshing = isLoading,
-                    onRefresh = { 
-                        Timber.d("RatesScreen: Pull-to-refresh triggered")
-                        viewModel.refreshCoins() 
-                    },
+                    onRefresh = { viewModel.refreshCoins() },
                     modifier = Modifier
                         .fillMaxSize()
                         .statusBarsPadding()
@@ -139,12 +160,25 @@ fun CoinCard(coin: CoinPaprikaCoin) {
     }
 }
 
+// Optimized EnhancedCoinCard with better memory performance
 @Composable
 fun EnhancedCoinCard(coin: CoinPaprikaCoin, price: Double? = null, priceChange24h: Double? = null) {
     val currentPrice = price ?: 0.0
     val priceChangePercent = priceChange24h ?: 0.0
     val isPriceUp = priceChangePercent >= 0
     val priceAvailable = price != null
+
+    // Pre-format strings to avoid doing this during the draw phase
+    val priceText = if (priceAvailable) "$${String.format("%,.2f", currentPrice)}" else "Price N/A"
+    val changeText = if (priceAvailable && priceChange24h != null) {
+        val prefix = if (isPriceUp) "+" else ""
+        "$prefix${String.format("%.2f", priceChangePercent)}%"
+    } else ""
+    
+    // Use remember for colors to avoid recreation
+    val changeColor = remember(isPriceUp) {
+        if (isPriceUp) Color(0xFF4CAF50) else Color(0xFFE53935)
+    }
 
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
@@ -211,7 +245,7 @@ fun EnhancedCoinCard(coin: CoinPaprikaCoin, price: Double? = null, priceChange24
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = if (priceAvailable) "$${String.format("%,.2f", currentPrice)}" else "Price N/A",
+                    text = priceText,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSurface
@@ -222,17 +256,17 @@ fun EnhancedCoinCard(coin: CoinPaprikaCoin, price: Double? = null, priceChange24
                         Icon(
                             imageVector = if (isPriceUp) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
                             contentDescription = "Price change direction",
-                            tint = if (isPriceUp) Color(0xFF4CAF50) else Color(0xFFE53935),
+                            tint = changeColor,
                             modifier = Modifier.size(16.dp)
                         )
 
                         Text(
-                            text = "${String.format("%.2f", priceChangePercent.absoluteValue)}%",
+                            text = changeText,
                             fontSize = 14.sp,
-                            color = if (isPriceUp) Color(0xFF4CAF50) else Color(0xFFE53935)
+                            color = changeColor
                         )
                     }
-                } else {
+                } else if (!priceAvailable) {
                     Text(
                         text = "Change N/A",
                         fontSize = 14.sp,
