@@ -19,7 +19,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import app.unicornapp.unicorncrm.movielist.presentation.MovieListUiEvent
 import app.unicornapp.unicorncrm.movielist.presentation.MoviesViewModel
+import app.unicornapp.unicorncrm.movielist.util.Category
 import app.unicornapp.unicorncrm.presentation.MockDestinationsNavigator
 import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyColumn
 import app.unicornapp.unicorncrm.ui.navigation.ScreenDrawer
@@ -30,13 +32,14 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import app.unicornapp.unicorncrm.ui.composables.MovieCard
 import app.unicornapp.unicorncrm.ui.composables.MovieCardItem
 import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyVerticalGrid
+import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyVerticalGridIndexed
+import timber.log.Timber
 
 @Destination
 @Composable
 fun MoviesPopularScreen(
     navController: NavController,
-    navigator: DestinationsNavigator
-
+    navigator: DestinationsNavigator,
 ) {
     val movieListViewModel = hiltViewModel<MoviesViewModel>()
     val movieListState by movieListViewModel.movieListState.collectAsStateWithLifecycle()
@@ -57,13 +60,13 @@ fun MoviesPopularScreen(
                 color = Color.White
             )
         } else {
-            PullToRefreshLazyVerticalGrid(
+            PullToRefreshLazyVerticalGridIndexed(
                 items = movieListState.popularMovieList,
-                content = { movie ->
-
+                content = { index, movie ->
                     MovieCardItem(
                         movie = movie,
                         onMovieClick = {
+                            Timber.d("---MoviesPopularScreen about to navigate to MoviesDetailScreen---")
                             navController.navigate(
                                 ScreenDrawer.MoviesDetailScreen.route.replace(
                                     "{movieId}",
@@ -73,6 +76,12 @@ fun MoviesPopularScreen(
                         }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
+                    val isNearEnd = index >= movieListState.popularMovieList.size - 1
+                    if (isNearEnd && !movieListState.isLoading) {
+                        Timber.d("---MoviesPopularScreen about to call movieListViewModel.onEvent---")
+                        // TODO-FIXME-CLEANUP-IMPROVE onEvent(MovieListUiEvent.Paginate(Category.POPULAR))
+                        movieListViewModel.onEvent(MovieListUiEvent.Paginate(Category.POPULAR))
+                    }
                 },
                 isRefreshing = movieListState.isLoading,
                 onRefresh = { movieListViewModel.refreshMovies() },
