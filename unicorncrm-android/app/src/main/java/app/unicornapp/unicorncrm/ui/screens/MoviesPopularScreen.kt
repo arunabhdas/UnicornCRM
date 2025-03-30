@@ -51,7 +51,7 @@ fun MoviesPopularScreen(
             ),
         contentAlignment = Alignment.Center
     ) {
-        if (movieListState.isLoading) {
+        if (movieListState.popularMovieList.isEmpty()) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center),
                 color = Color.White
