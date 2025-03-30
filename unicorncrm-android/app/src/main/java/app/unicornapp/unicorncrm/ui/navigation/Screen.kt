@@ -1,6 +1,7 @@
 package app.unicornapp.unicorncrm.ui.navigation
 
 sealed class Screen(val route: String) {
+    object OnboardingScreen: Screen(route = "onboarding_screen")
     object LandingScreen: Screen(route = "landing_screen")
     object LoginScreen: Screen(route = "login_screen")
     object RegistrationScreen: Screen(route = "registration_screen")

@@ -67,8 +67,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-                val viewModel = getViewModel<MainViewModel>()
-                viewModel.doNetworkCall()
+                // TODO-FIXME-DEPRECATE val viewModel = getViewModel<MainViewModel>()
+                // TODO-FIXME-DEPRECATE viewModel.doNetworkCall()
                 navHostController = rememberNavController()
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),

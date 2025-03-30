@@ -24,7 +24,7 @@ fun SetupDrawerNavGraph(
         navController = navController,
         startDestination = ScreenDrawer.MoviesPopularScreen.route
     ) {
-        // TODO - Adde MoviesScreen
+        // TODO-FIXME - MoviesScreen
         composable(
             route = ScreenDrawer.MoviesPopularScreen.route
         ) {
@@ -34,7 +34,7 @@ fun SetupDrawerNavGraph(
             )
         }
 
-        // Movies Detail Screen
+        // TODO-FIXME - Movies Detail Screen
         composable(
             route = ScreenDrawer.MoviesDetailScreen.route,
             arguments = listOf(
@@ -50,7 +50,6 @@ fun SetupDrawerNavGraph(
         }
 
         // TODO-FIXME - MoviesUpcomingScreen
-
         composable(
             route = ScreenDrawer.MoviesUpcomingScreen.route
         ) {
@@ -60,6 +59,7 @@ fun SetupDrawerNavGraph(
             )
         }
 
+        // TODO-FIXME - RatesScreen
         composable(
             route = ScreenDrawer.RatesScreen.route
         ) {
