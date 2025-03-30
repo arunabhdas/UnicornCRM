@@ -2,6 +2,7 @@ package app.unicornapp.unicorncrm.api
 
 
 import app.unicornapp.unicorncrm.data.model.CoinPaprikaCoin
+import app.unicornapp.unicorncrm.data.model.CoinTicker
 import retrofit2.Retrofit
 
 class CoinPaprikaApiServiceImpl(
@@ -15,5 +16,9 @@ class CoinPaprikaApiServiceImpl(
 
     override suspend fun getCoins(): List<CoinPaprikaCoin> {
         return service.getCoins()
+    }
+
+    override suspend fun getTickers(): List<CoinTicker> {
+        return service.getTickers()
     }
 }

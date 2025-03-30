@@ -8,6 +8,8 @@ import android.os.Build
 
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.compose.KoinContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
 import app.unicornapp.unicorncrm.BuildConfig
