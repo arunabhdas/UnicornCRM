@@ -64,6 +64,7 @@ import timber.log.Timber
 
 @Destination
 @OptIn(ExperimentalPermissionsApi::class)
+@RootNavGraph(start = true)
 @Composable
 fun LandingScreen(
     // TODO-DEPRECATE navController: NavController,

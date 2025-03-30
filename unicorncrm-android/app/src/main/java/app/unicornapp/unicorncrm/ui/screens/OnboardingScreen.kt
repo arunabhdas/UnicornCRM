@@ -51,7 +51,6 @@ import kotlinx.coroutines.launch
  */
 @Destination
 @OptIn(ExperimentalFoundationApi::class)
-@RootNavGraph(start = true)
 @Composable
 fun OnboardingScreen(
     onGetStartedClick: () -> Unit
