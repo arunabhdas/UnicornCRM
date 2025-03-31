@@ -2,6 +2,7 @@ package app.unicornapp.unicorncrm.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,9 +62,31 @@ fun EnhancedCoinCard(
         if (isPriceUp) Color(0xFF4CAF50) else Color(0xFFE53935)
     }
 
+    // Memoize the click handler to prevent recreations during recomposition
+    val onClickHandler = remember(coin.id, coin.name, coin.symbol, coin.rank, price, priceChange24h) {
+        {
+            navigator.navigate(
+                RatesDetailScreenDestination(
+                    coinId = coin.id,
+                    coinName = coin.name,
+                    coinSymbol = coin.symbol,
+                    coinRank = coin.rank,
+                    price = price,
+                    priceChange24h = priceChange24h
+                )
+            )
+        }
+    }
+
+    // Create interaction source for ripple effect
+    val interactionSource = remember { MutableInteractionSource() }
+
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            // Simple clickable with default ripple effect
+            .clickable(onClick = onClickHandler),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
@@ -93,21 +116,6 @@ fun EnhancedCoinCard(
             Column(
                 modifier = Modifier
                     .weight(1f)
-
-                .clickable {
-                    navigator.navigate(
-                        RatesDetailScreenDestination(
-                            coinId = coin.id,
-                            coinName = coin.name,
-                            coinSymbol = coin.symbol,
-                            coinRank = coin.rank,
-                            price = price,
-                            priceChange24h = priceChange24h,
-                            // TODO-FIXME-CLEANUP navController = navController,
-                            // TODO-FIXME-CLEANUP navigator = navigator
-                        )
-                    )
-                }
             )
             {
                 Text(
@@ -177,4 +185,3 @@ fun EnhancedCoinCard(
         }
     }
 }
-
