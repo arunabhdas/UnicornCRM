@@ -103,10 +103,10 @@ fun MovieDetailsItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(top = 4.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.0f)
         ),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
@@ -171,11 +171,11 @@ fun MovieDetailsItem(
                 }
             }
 
-            // Details Section with white background
+            // Details Section with translucent overlay
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White)
+                    .background(Color.Black.copy(alpha = 0.7f))
                     .padding(16.dp)
             ) {
                 // Title and Rating Section
@@ -188,7 +188,7 @@ fun MovieDetailsItem(
                         text = title,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = Color.White,
                         modifier = Modifier.weight(1f),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
@@ -221,12 +221,12 @@ fun MovieDetailsItem(
                         text = "${movie?.vote_average?.toString()?.take(3) ?: "0.0"}/10",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = Color.White.copy(alpha = 0.9f)
                     )
                 }
                 
                 Spacer(modifier = Modifier.height(16.dp))
-                Divider()
+                Divider(color = Color.White.copy(alpha = 0.3f))
                 Spacer(modifier = Modifier.height(16.dp))
                 
                 // Release Date and Language
@@ -246,7 +246,7 @@ fun MovieDetailsItem(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(start = 8.dp),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = Color.White.copy(alpha = 0.9f)
                     )
                 }
                 
@@ -281,7 +281,7 @@ fun MovieDetailsItem(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(start = 8.dp),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = Color.White.copy(alpha = 0.9f)
                     )
                 }
                 
@@ -315,7 +315,7 @@ fun MovieDetailsItem(
                 }
                 
                 Spacer(modifier = Modifier.height(16.dp))
-                Divider()
+                Divider(color = Color.White.copy(alpha = 0.3f))
                 Spacer(modifier = Modifier.height(16.dp))
                 
                 // Overview Section
@@ -323,7 +323,7 @@ fun MovieDetailsItem(
                     text = "Overview",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = Color.White
                 )
                 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -332,12 +332,12 @@ fun MovieDetailsItem(
                     text = movie?.overview ?: "No overview available",
                     fontSize = 14.sp,
                     lineHeight = 20.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                    color = Color.White.copy(alpha = 0.8f),
                     textAlign = TextAlign.Justify
                 )
                 
                 Spacer(modifier = Modifier.height(16.dp))
-                Divider()
+                Divider(color = Color.White.copy(alpha = 0.3f))
                 Spacer(modifier = Modifier.height(16.dp))
                 
                 // Additional Stats
@@ -345,7 +345,7 @@ fun MovieDetailsItem(
                     text = "Additional Information",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = Color.White
                 )
                 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -359,7 +359,8 @@ fun MovieDetailsItem(
                         title = "Votes", 
                         value = "${movie?.vote_count ?: 0}",
                         icon = Icons.Default.PeopleAlt,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        isDarkMode = true
                     )
                     
                     Spacer(modifier = Modifier.width(8.dp))
@@ -368,7 +369,8 @@ fun MovieDetailsItem(
                         title = "Popularity", 
                         value = "${String.format("%.1f", movie?.popularity ?: 0.0)}",
                         icon = null,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        isDarkMode = true
                     )
                 }
                 
@@ -397,13 +399,14 @@ private fun StatCard(
     title: String,
     value: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isDarkMode: Boolean = false
 ) {
     Card(
         modifier = modifier
             .padding(4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+            containerColor = if (isDarkMode) Color.Black.copy(alpha = 0.5f) else MaterialTheme.colorScheme.secondaryContainer
         )
     ) {
         Column(
@@ -427,13 +430,13 @@ private fun StatCard(
                 text = value,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                color = if (isDarkMode) Color.White else MaterialTheme.colorScheme.onSecondaryContainer
             )
             
             Text(
                 text = title,
                 fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+                color = if (isDarkMode) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
             )
         }
     }

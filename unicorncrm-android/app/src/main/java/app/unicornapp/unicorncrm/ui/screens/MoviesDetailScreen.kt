@@ -62,11 +62,15 @@ fun MoviesDetailScreen(
             ),
         contentAlignment = Alignment.TopCenter
     ) {
+        // Remember the scroll state for better performance
+        val scrollState = rememberScrollState()
+        
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 60.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(top = 75.dp)
+                .verticalScroll(scrollState)
+                .padding(bottom = 24.dp),  // Added bottom padding for content at the bottom
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
