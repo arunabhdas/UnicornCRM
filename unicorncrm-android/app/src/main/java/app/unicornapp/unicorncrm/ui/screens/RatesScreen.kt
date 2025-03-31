@@ -28,7 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,6 +57,13 @@ import org.koin.compose.KoinContext
 import timber.log.Timber
 import kotlin.math.absoluteValue
 
+// Simple data holder class to pre-compute display values
+private data class CoinDisplayData(
+    val coin: CoinPaprikaCoin,
+    val price: Double?,
+    val priceChange24h: Double?
+)
+
 @Destination
 @Composable
 fun RatesScreen(
@@ -65,6 +72,9 @@ fun RatesScreen(
 ) {
     KoinContext {
         val viewModel = koinViewModel<CoinViewModel>()
+        
+        // Use a stable LazyListState for better scroll performance
+        val listState = rememberLazyListState()
         
         // Collect state flows efficiently with initialValue to avoid stalls
         val coins by viewModel.coinList.collectAsStateWithLifecycle(initialValue = emptyList())
@@ -76,6 +86,18 @@ fun RatesScreen(
             coinsWithPrices.associateBy { it.id }
         }
         
+        // Pre-compute all display data to avoid calculations during rendering
+        val displayItems = remember(coins, coinPriceMap) {
+            coins.map { coin ->
+                val priceData = coinPriceMap[coin.id]
+                CoinDisplayData(
+                    coin = coin,
+                    price = priceData?.price,
+                    priceChange24h = priceData?.priceChange24h
+                )
+            }
+        }
+        
         // Only trigger refresh on first composition
         LaunchedEffect(Unit) {
             if (coins.isEmpty() && !isLoading) {
@@ -84,8 +106,8 @@ fun RatesScreen(
         }
 
         // Use derivedStateOf for derived UI states to avoid unnecessary recompositions
-        val showFullScreenLoading = remember(coins, isLoading) { 
-            isLoading && coins.isEmpty() 
+        val showFullScreenLoading by remember {
+            derivedStateOf { isLoading && coins.isEmpty() }
         }
 
         Box(
@@ -120,19 +142,15 @@ fun RatesScreen(
                     color = Color.White
                 )
             } else {
-                // Optimize rendering with key for proper diffing
-                val listItems = remember(coins) { coins.toList() }
-                
+                // Use the optimized list items with pre-computed values
                 PullToRefreshLazyColumn(
-                    items = listItems,
-                    content = { coin ->
-                        // Look up price data using efficient map lookup
-                        val coinWithPrice = coinPriceMap[coin.id]
-                        
+                    items = displayItems,
+                    content = { displayData ->
+                        // No lookups or calculations here - all data is pre-computed
                         EnhancedCoinCard(
-                            coin = coin,
-                            price = coinWithPrice?.price,
-                            priceChange24h = coinWithPrice?.priceChange24h,
+                            coin = displayData.coin,
+                            price = displayData.price,
+                            priceChange24h = displayData.priceChange24h,
                             navController = navController,
                             navigator = navigator
                         )

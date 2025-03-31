@@ -45,23 +45,30 @@ fun EnhancedCoinCard(
     navController: NavController,
     navigator: DestinationsNavigator
 ) {
-    val currentPrice = price ?: 0.0
-    val priceChangePercent = priceChange24h ?: 0.0
-    val isPriceUp = priceChangePercent >= 0
+    // Compute all values outside of the composition phase
+    // These are stable calculations that shouldn't happen during layout/draw
+    val firstLetter = remember(coin.symbol) { coin.symbol.take(1) }
+    val rankText = remember(coin.rank) { "Rank #${coin.rank}" }
+    val isPriceUp = remember(priceChange24h) { (priceChange24h ?: 0.0) >= 0 }
     val priceAvailable = price != null
-
+    
     // Pre-format strings to avoid doing this during the draw phase
-    val priceText = if (priceAvailable) "$${String.format("%,.2f", currentPrice)}" else "Price N/A"
-    val changeText = if (priceAvailable && priceChange24h != null) {
-        val prefix = if (isPriceUp) "+" else ""
-        "$prefix${String.format("%.2f", priceChangePercent)}%"
-    } else ""
+    val priceText = remember(price, priceAvailable) {
+        if (priceAvailable) "$${String.format("%,.2f", price)}" else "Price N/A"
+    }
+    
+    val changeText = remember(priceChange24h, isPriceUp) {
+        if (priceAvailable && priceChange24h != null) {
+            val prefix = if (isPriceUp) "+" else ""
+            "$prefix${String.format("%.2f", priceChange24h)}%"
+        } else ""
+    }
 
     // Use remember for colors to avoid recreation
     val changeColor = remember(isPriceUp) {
         if (isPriceUp) Color(0xFF4CAF50) else Color(0xFFE53935)
     }
-
+    
     // Memoize the click handler to prevent recreations during recomposition
     val onClickHandler = remember(coin.id, coin.name, coin.symbol, coin.rank, price, priceChange24h) {
         {
@@ -78,106 +85,110 @@ fun EnhancedCoinCard(
         }
     }
 
-    // Create interaction source for ripple effect
-    val interactionSource = remember { MutableInteractionSource() }
-
+    // Create a simplified card with less nesting
     Card(
-        elevation = CardDefaults.cardElevation(4.dp),
+        elevation = CardDefaults.cardElevation(2.dp), // Reduce elevation for faster rendering
         modifier = Modifier
             .fillMaxWidth()
-            // Simple clickable with default ripple effect
             .clickable(onClick = onClickHandler),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
         )
     ) {
+        // Single row layout to reduce nesting
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(12.dp), // Reduced padding
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Coin symbol circle
             Box(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(40.dp) // Reduced size
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = coin.symbol.take(1),
-                    fontSize = 20.sp,
+                    text = firstLetter,
+                    fontSize = 16.sp, // Reduced font size
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
+            // Coin details (middle column)
             Column(
-                modifier = Modifier
-                    .weight(1f)
-            )
-            {
+                modifier = Modifier.weight(1f)
+            ) {
+                // Coin name
                 Text(
                     text = coin.name,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp, // Reduced font size
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
+                // Symbol and rank
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = coin.symbol,
-                        fontSize = 14.sp,
+                        fontSize = 12.sp, // Reduced font size
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
 
+                    // Rank badge
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(4.dp))
                             .background(MaterialTheme.colorScheme.primaryContainer)
-                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                            .padding(horizontal = 4.dp, vertical = 2.dp) // Reduced padding
                     ) {
                         Text(
-                            text = "Rank #${coin.rank}",
-                            fontSize = 12.sp,
+                            text = rankText,
+                            fontSize = 10.sp, // Reduced font size
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
             }
 
+            // Price details (right column)
             Column(horizontalAlignment = Alignment.End) {
+                // Price
                 Text(
                     text = priceText,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp, // Reduced font size
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
+                // Price change
                 if (priceAvailable && priceChange24h != null) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = if (isPriceUp) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
                             contentDescription = "Price change direction",
                             tint = changeColor,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(14.dp) // Reduced icon size
                         )
 
                         Text(
                             text = changeText,
-                            fontSize = 14.sp,
+                            fontSize = 12.sp, // Reduced font size
                             color = changeColor
                         )
                     }
                 } else if (!priceAvailable) {
                     Text(
                         text = "Change N/A",
-                        fontSize = 14.sp,
+                        fontSize = 12.sp, // Reduced font size
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
