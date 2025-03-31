@@ -60,19 +60,19 @@ fun MoviesDetailScreen(
                     isVertical = true
                 )
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(top = 60.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             MovieDetailsItem(
                 movie = movieDetailsState.movie,
                 navController = navController,
-
             )
         }
     }

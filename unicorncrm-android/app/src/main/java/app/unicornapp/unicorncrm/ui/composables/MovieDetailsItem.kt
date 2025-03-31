@@ -1,6 +1,5 @@
 package app.unicornapp.unicorncrm.ui.composables
 
-import android.R.attr.font
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,13 +7,24 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.PeopleAlt
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,7 +45,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,19 +60,32 @@ import coil.request.ImageRequest
 import coil.size.Size
 import app.unicornapp.unicorncrm.movielist.domain.model.Movie
 import app.unicornapp.unicorncrm.movielist.util.getAverageColor
-import okhttp3.Route
 import app.unicornapp.unicorncrm.R
 import app.unicornapp.unicorncrm.movielist.util.RatingBar
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun MovieDetailsItem(
     movie: Movie?,
     navController: NavController
 ) {
+    // Format the release date in a more readable format
+    val formattedDate = remember(movie?.release_date) {
+        movie?.release_date?.let {
+            try {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                val outputFormat = SimpleDateFormat("MMMM d, yyyy", Locale.US)
+                val date = inputFormat.parse(it)
+                date?.let { outputFormat.format(date) } ?: it
+            } catch (e: Exception) {
+                it
+            }
+        } ?: "Unknown release date"
+    }
 
     val imageUrl = "${MovieApiService.IMAGE_BASE_URL}${movie?.backdrop_path}"
-
-    val title = movie?.title
+    val title = movie?.title ?: ""
 
     val imagePainter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -75,18 +100,19 @@ fun MovieDetailsItem(
         mutableStateOf(defaultDominantColor)
     }
 
-    Box(
-        modifier = Modifier.padding(
-            bottom = 16.dp,
-            start = 8.dp,
-            end = 8.dp
-        )
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(8.dp)
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(4.dp))
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
@@ -95,113 +121,320 @@ fun MovieDetailsItem(
                         )
                     )
                 )
-                .clickable {
-                    // TODO-FIXME
-                }
         ) {
-
+            // Backdrop Image Section
             Box(
                 modifier = Modifier
                     .height(240.dp)
-                    .fillMaxSize()
-                    .padding(6.dp)
+                    .fillMaxWidth()
+                    .padding(12.dp)
             ) {
+                when (imageState) {
+                    is AsyncImagePainter.State.Success -> {
+                        val imageBitmap = imageState.result.drawable.toBitmap()
+                        dominantColor = getAverageColor(imageBitmap.asImageBitmap())
 
-                if (imageState is AsyncImagePainter.State.Success) {
-
-                    val imageBitmap = imageState.result.drawable.toBitmap()
-
-
-                    dominantColor = getAverageColor(imageBitmap.asImageBitmap())
-
-                    Image(
-                        bitmap = imageBitmap.asImageBitmap(),
-                        contentDescription = title,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(MaterialTheme.colorScheme.background),
-                    )
-
-                }
-
-                if (imageState is AsyncImagePainter.State.Error) {
-                    dominantColor = MaterialTheme.colorScheme.primary
-                    Icon(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(32.dp)
-                            .alpha(0.8f),
-                        painter = painterResource(id = R.drawable.ic_menu_camera),
-                        contentDescription = title,
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-
-
-                if (imageState is AsyncImagePainter.State.Loading) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .align(Alignment.Center)
-                            .scale(0.5f)
-                    )
+                        Image(
+                            bitmap = imageBitmap.asImageBitmap(),
+                            contentDescription = title,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.background),
+                        )
+                    }
+                    is AsyncImagePainter.State.Error -> {
+                        dominantColor = MaterialTheme.colorScheme.primary
+                        Icon(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(32.dp)
+                                .alpha(0.8f),
+                            painter = painterResource(id = R.drawable.ic_menu_camera),
+                            contentDescription = title,
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                    is AsyncImagePainter.State.Loading -> {
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier
+                                .size(150.dp)
+                                .align(Alignment.Center)
+                                .scale(0.5f)
+                        )
+                    }
+                    else -> {}
                 }
             }
 
-            var badgeCount by remember { mutableIntStateOf(0) }
-            Text(
-                modifier = Modifier
-                    .padding(
-                        horizontal = 12.dp,
-                        vertical = 4.dp
-                    ),
-                text = title.toString(),
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 1,
-                color = Color.White,
-                overflow = TextOverflow.Ellipsis,
-
-            )
-            Row(
+            // Details Section with white background
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        top = 4.dp,
-                        start = 11.dp,
-                        end = 16.dp,
-                        bottom = 8.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .background(Color.White)
+                    .padding(16.dp)
             ) {
+                // Title and Rating Section
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = title,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.weight(1f),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    
+                    Icon(
+                        imageVector = Icons.Default.Bookmark,
+                        contentDescription = "Bookmark",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .size(28.dp)
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                // Rating Bar
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     RatingBar(
                         modifier = Modifier,
-                        starsModifier = Modifier
-                            .size(18.dp),
+                        starsModifier = Modifier.size(20.dp),
                         rating = movie?.vote_average?.div(2) ?: 0.0
                     )
+                    
                     Text(
-                        modifier = Modifier
-                            .padding(
-                                horizontal = 4.dp
-                            ),
-                        text = movie?.vote_average.toString().take(3),
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        color = Color.LightGray
+                        modifier = Modifier.padding(start = 8.dp),
+                        text = "${movie?.vote_average?.toString()?.take(3) ?: "0.0"}/10",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
-
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                Divider()
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                // Release Date and Language
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CalendarToday,
+                        contentDescription = "Release Date",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    
+                    Text(
+                        text = "Released: $formattedDate",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(start = 8.dp),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Language,
+                        contentDescription = "Language",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    
+                    val language = when (movie?.original_language) {
+                        "en" -> "English"
+                        "es" -> "Spanish"
+                        "fr" -> "French"
+                        "de" -> "German"
+                        "it" -> "Italian"
+                        "ja" -> "Japanese"
+                        "ko" -> "Korean"
+                        "zh" -> "Chinese"
+                        "ru" -> "Russian"
+                        else -> movie?.original_language?.uppercase() ?: "Unknown"
+                    }
+                    
+                    Text(
+                        text = "Language: $language",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(start = 8.dp),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                // Watch Now Button
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.primary)
+                        .clickable { /* TODO: Implement watch functionality */ }
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = "Watch",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    
+                    Text(
+                        text = "Watch Trailer",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                Divider()
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                // Overview Section
+                Text(
+                    text = "Overview",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                Text(
+                    text = movie?.overview ?: "No overview available",
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                    textAlign = TextAlign.Justify
+                )
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                Divider()
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                // Additional Stats
+                Text(
+                    text = "Additional Information",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                // Stats Cards
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    StatCard(
+                        title = "Votes", 
+                        value = "${movie?.vote_count ?: 0}",
+                        icon = Icons.Default.PeopleAlt,
+                        modifier = Modifier.weight(1f)
+                    )
+                    
+                    Spacer(modifier = Modifier.width(8.dp))
+                    
+                    StatCard(
+                        title = "Popularity", 
+                        value = "${String.format("%.1f", movie?.popularity ?: 0.0)}",
+                        icon = null,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                
+                if (movie?.adult == true) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Text(
+                        text = "Adult Content",
+                        color = Color.Red,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.Red.copy(alpha = 0.1f), RoundedCornerShape(4.dp))
+                            .padding(8.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
+        }
+    }
+}
+
+@Composable
+private fun StatCard(
+    title: String,
+    value: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector?,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .padding(4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (icon != null) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = title,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(4.dp))
+            
+            Text(
+                text = value,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+            
+            Text(
+                text = title,
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+            )
         }
     }
 }
