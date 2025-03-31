@@ -7,9 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +37,7 @@ import app.unicornapp.unicorncrm.ui.composables.MovieCardItem
 import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyVerticalGrid
 import app.unicornapp.unicorncrm.ui.composables.PullToRefreshLazyVerticalGridIndexed
 import app.unicornapp.unicorncrm.ui.navigation.ScreenDrawer
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Destination
@@ -44,6 +49,26 @@ fun MoviesUpcomingScreen(
 ) {
     val movieListViewModel = hiltViewModel<MoviesViewModel>()
     val movieListState by movieListViewModel.movieListState.collectAsStateWithLifecycle()
+    
+    // Remember the grid state to maintain scroll position
+    val gridState = rememberLazyGridState()
+    
+    // Optimize isNearEnd check using derivedStateOf to prevent unnecessary recompositions
+    val isNearEnd by remember {
+        derivedStateOf {
+            val lastVisibleItem = gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisibleItem >= movieListState.upcomingMovieList.size - 5
+        }
+    }
+    
+    // Load more content when we're near the end of the list
+    LaunchedEffect(isNearEnd) {
+        if (isNearEnd && !movieListState.isLoading && movieListState.upcomingMovieList.isNotEmpty()) {
+            Timber.d("---MoviesUpcomingScreen pagination triggered by LaunchedEffect---")
+            movieListViewModel.onEvent(MovieListUiEvent.Paginate(Category.UPCOMING))
+        }
+    }
+    
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +80,7 @@ fun MoviesUpcomingScreen(
             ),
         contentAlignment = Alignment.Center
     ) {
-        if (movieListState.isLoading) {
+        if (movieListState.isLoading && movieListState.upcomingMovieList.isEmpty()) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center),
                 color = Color.White
@@ -63,18 +88,13 @@ fun MoviesUpcomingScreen(
         } else {
             PullToRefreshLazyVerticalGridIndexed(
                 items = movieListState.upcomingMovieList,
+                gridState = gridState,
                 content = { index, movie ->
                     MovieCardItem(
                         movie = movie,
                         navController = navController
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    val isNearEnd = index >= movieListState.upcomingMovieList.size - 1
-                    if (isNearEnd && !movieListState.isLoading) {
-                        Timber.d("---MoviesUpcomingScreen about to call movieListViewModel.onEvent---")
-                        // TODO-FIXME-CLEANUP-IMPROVE onEvent(MovieListUiEvent.Paginate(Category.UPCOMING))
-                        movieListViewModel.onEvent(MovieListUiEvent.Paginate(Category.UPCOMING))
-                    }
                 },
                 isRefreshing = movieListState.isLoading,
                 onRefresh = { movieListViewModel.refreshMovies() },
@@ -97,4 +117,3 @@ fun MoviesUpcomingScreenPreview() {
        navigator = MockDestinationsNavigator()
    )
 }
-
