@@ -52,27 +52,7 @@ class MoviesViewModel @Inject constructor(
        }
     }
 
-    fun getMovieById(id: Int) {
-        viewModelScope.launch {
-            movieListRepository.getMovie(id).collectLatest { result ->
-                when (result) {
-                    is Resource.Loading -> {
-                        _movieDetailState.value = MovieDetailState(isLoading = result.isLoading)
-                    }
-                    is Resource.Success -> {
-                        result.data?.let { movie ->
-                            _movieDetailState.value = MovieDetailState(movie = movie)
-                        }
-                    }
-                    is Resource.Error -> {
-                        _movieDetailState.value = MovieDetailState(
-                            error = result.message ?: "Unknown error occurred"
-                        )
-                    }
-                }
-            }
-        }
-    }
+
     private fun getPopularMovieList(forceFetchFromRemote: Boolean) {
         viewModelScope.launch {
             _movieListState.update {
