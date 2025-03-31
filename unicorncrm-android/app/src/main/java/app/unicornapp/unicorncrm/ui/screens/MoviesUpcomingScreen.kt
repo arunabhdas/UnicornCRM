@@ -73,7 +73,7 @@ fun MoviesUpcomingScreen(
                     if (isNearEnd && !movieListState.isLoading) {
                         Timber.d("---MoviesUpcomingScreen about to call movieListViewModel.onEvent---")
                         // TODO-FIXME-CLEANUP-IMPROVE onEvent(MovieListUiEvent.Paginate(Category.UPCOMING))
-                        movieListViewModel.onEvent(MovieListUiEvent.Paginate(Category.POPULAR))
+                        movieListViewModel.onEvent(MovieListUiEvent.Paginate(Category.UPCOMING))
                     }
                 },
                 isRefreshing = movieListState.isLoading,
